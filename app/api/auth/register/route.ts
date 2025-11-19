@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { AccountType } from "@/generated/prisma-client/client";
+import { ensureDbUser } from "@/lib/auth-bootstrap";
 
 const kenyaPhoneRegex = /^(?:\+254|0)(7\d{8})$/;
 
@@ -56,9 +57,12 @@ export async function POST(req: Request) {
 
   const { accountType, data } = parsed.data;
 
-  const dbUser = await prisma.user.findFirst({ where: { clerkId: userId } });
+  let dbUser = await prisma.user.findFirst({ where: { clerkId: userId } });
   if (!dbUser) {
-    return NextResponse.json({ error: "User record not found" }, { status: 404 });
+    dbUser = await ensureDbUser();
+    if (!dbUser) {
+      return NextResponse.json({ error: "User record not found" }, { status: 404 });
+    }
   }
 
   if (accountType === "INDIVIDUAL") {

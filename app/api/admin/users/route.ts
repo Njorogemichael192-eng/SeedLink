@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSuperAdmin } from "@/lib/auth-helpers";
+import { computeIndividualEcoBadge, computeIndividualEcoScore } from "@/lib/eco-score";
 
 // GET /api/admin/users
 // Optional search via ?q= (matches name/email/club/institution)
@@ -32,7 +33,22 @@ export async function GET(req: Request) {
     take: 200,
   });
 
-  return NextResponse.json({ users });
+  const usersWithEco = await Promise.all(
+    users.map(async (u) => {
+      const [ecoScore, ecoBadge] = await Promise.all([
+        computeIndividualEcoScore(u.id),
+        computeIndividualEcoBadge(u.id),
+      ]);
+
+      return {
+        ...u,
+        ecoScore,
+        ecoTier: ecoBadge?.tier ?? null,
+      };
+    }),
+  );
+
+  return NextResponse.json({ users: usersWithEco });
 }
 
 // PATCH /api/admin/users

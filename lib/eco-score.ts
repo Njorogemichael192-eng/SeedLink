@@ -19,8 +19,8 @@ function getCurrentYearRange() {
   return { year, start, end };
 }
 
-export async function computeIndividualEcoBadge(userId: string): Promise<EcoBadge | null> {
-  const { year, start, end } = getCurrentYearRange();
+async function computeIndividualRawMetrics(userId: string) {
+  const { start, end } = getCurrentYearRange();
 
   const [bookings, posts, attendances] = await Promise.all([
     prisma.booking.aggregate({
@@ -50,7 +50,18 @@ export async function computeIndividualEcoBadge(userId: string): Promise<EcoBadg
   const postsCount = posts;
   const eventsJoined = attendances;
 
+  return { trees, postsCount, eventsJoined };
+}
+
+export async function computeIndividualEcoScore(userId: string): Promise<number> {
+  const { trees, postsCount, eventsJoined } = await computeIndividualRawMetrics(userId);
   const ecoScore = trees * 1 + postsCount * 5 + eventsJoined * 10;
+  return ecoScore;
+}
+
+export async function computeIndividualEcoBadge(userId: string): Promise<EcoBadge | null> {
+  const { year } = getCurrentYearRange();
+  const ecoScore = await computeIndividualEcoScore(userId);
 
   const { tier, title } = mapIndividualScoreToTier(ecoScore);
   if (tier === "NONE") return null;

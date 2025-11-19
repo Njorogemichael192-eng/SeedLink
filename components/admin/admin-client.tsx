@@ -150,6 +150,16 @@ type AdminUser = {
   institutionName: string | null;
   isVerified: boolean;
   createdAt: string;
+  ecoScore: number | null;
+  ecoTier: string | null;
+};
+
+const ecoTierLabels: Record<string, string> = {
+  BRONZE: "Bronze",
+  SILVER: "Silver",
+  GOLD: "Gold",
+  PLATINUM: "Platinum",
+  DIAMOND: "Diamond",
 };
 
 function UsersPanel() {
@@ -173,6 +183,8 @@ function UsersPanel() {
         clubName: u.clubName ?? null,
         institutionName: u.institutionName ?? null,
         isVerified: Boolean(u.isVerified),
+        ecoScore: typeof u.ecoScore === "number" ? u.ecoScore : null,
+        ecoTier: typeof u.ecoTier === "string" ? u.ecoTier : null,
         createdAt:
           typeof u.createdAt === "string"
             ? u.createdAt
@@ -211,6 +223,8 @@ function UsersPanel() {
         clubName: u.clubName ?? null,
         institutionName: u.institutionName ?? null,
         isVerified: Boolean(u.isVerified),
+        ecoScore: typeof u.ecoScore === "number" ? u.ecoScore : null,
+        ecoTier: typeof u.ecoTier === "string" ? u.ecoTier : null,
         createdAt:
           typeof u.createdAt === "string"
             ? u.createdAt
@@ -263,6 +277,8 @@ function UsersPanel() {
                   <th className="px-3 py-2 text-left font-semibold">Email</th>
                   <th className="px-3 py-2 text-left font-semibold">Account</th>
                   <th className="px-3 py-2 text-left font-semibold">Club / Institution</th>
+                  <th className="px-3 py-2 text-left font-semibold">Score</th>
+                  <th className="px-3 py-2 text-left font-semibold">Level</th>
                   <th className="px-3 py-2 text-left font-semibold">Role</th>
                   <th className="px-3 py-2 text-left font-semibold">Status</th>
                   <th className="px-3 py-2 text-left font-semibold">Actions</th>
@@ -290,6 +306,12 @@ function UsersPanel() {
                       <td className="px-3 py-2 align-middle text-emerald-50/80">
                         <div>{u.clubName || "-"}</div>
                         <div className="text-[10px] text-emerald-100/60">{u.institutionName || ""}</div>
+                      </td>
+                      <td className="px-3 py-2 align-middle text-emerald-50/80">
+                        {u.ecoScore ?? "-"}
+                      </td>
+                      <td className="px-3 py-2 align-middle text-emerald-50/80">
+                        {u.ecoTier ? ecoTierLabels[u.ecoTier] : "-"}
                       </td>
                       <td className="px-3 py-2 align-middle">
                         <select
