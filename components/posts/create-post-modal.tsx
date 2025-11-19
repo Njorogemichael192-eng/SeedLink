@@ -100,7 +100,7 @@ export function CreatePostModal({ open, onClose }: { open: boolean; onClose: () 
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="space-y-4">
+      <div className="space-y-4 max-h-[80vh] overflow-y-auto pr-1">
         <div className="text-xl font-semibold text-emerald-900 dark:text-emerald-100">Create Post</div>
         {error ? <div className="rounded border border-red-300/40 bg-red-100/40 p-2 text-red-800">{error}</div> : null}
 
