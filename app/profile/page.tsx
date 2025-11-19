@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { PostCard } from "@/components/posts/post-card";
+import { ContentCard } from "@/components/posts/content-card";
+import { ProfilePictureUploader } from "@/components/ui/profile-picture-uploader";
 import { BackButton } from "@/components/ui/back-button";
 import type { FeedPost } from "@/components/dashboard/feed-client";
 import type { EcoBadge } from "@/lib/eco-score";
@@ -37,7 +37,6 @@ export default function ProfilePage() {
   const [whatsapp, setWhatsapp] = useState("");
   const [facebook, setFacebook] = useState("");
   const [profilePictureUrl, setProfilePictureUrl] = useState("");
-  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -82,25 +81,6 @@ export default function ProfilePage() {
     onError: (e: unknown) => setError(e instanceof Error ? e.message : "Failed to save profile"),
   });
 
-  const onPickAvatar = async (file: File | null) => {
-    if (!file) return;
-    setUploading(true);
-    try {
-      const form = new FormData();
-      form.append("files", file);
-      const res = await fetch("/api/uploads", { method: "POST", body: form });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Upload failed");
-      const url = (json.uploads?.[0]?.url as string) || "";
-      setProfilePictureUrl(url);
-      setSuccess("Photo uploaded");
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Upload failed");
-    } finally {
-      setUploading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen w-full p-6">
       <div className="mx-auto max-w-5xl mb-4">
@@ -112,28 +92,26 @@ export default function ProfilePage() {
           {error ? <div className="mb-2 rounded border border-red-300/40 bg-red-100/40 p-2 text-red-800 text-sm">{error}</div> : null}
           {success ? <div className="mb-2 rounded border border-emerald-300/40 bg-emerald-100/40 p-2 text-emerald-800 text-sm">{success}</div> : null}
           <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <Image
-                src={profilePictureUrl || "https://placehold.co/128x128?text=Avatar"}
-                alt="avatar"
-                width={64}
-                height={64}
-                className="h-16 w-16 rounded-full object-cover bg-emerald-700"
-                sizes="64px"
-                priority
-                unoptimized={!!profilePictureUrl && !profilePictureUrl.startsWith("https://placehold.co")}
+            {/* Profile Picture Section */}
+            <div>
+              <ProfilePictureUploader
+                currentImageUrl={profilePictureUrl}
+                onUploadComplete={(url) => {
+                  setProfilePictureUrl(url);
+                  setSuccess("Photo uploaded");
+                }}
+                disabled={save.isPending}
               />
-              <div className="flex flex-col gap-1">
-                <div className="text-base font-medium truncate max-w-40">
-                  {data?.profile.fullName || ""}
-                </div>
-                <EcoBadgePill badge={data?.profile.ecoBadge} />
-              </div>
-              <label className="text-sm">
-                <span className="block mb-1">Change photo</span>
-                <input type="file" accept="image/*" onChange={(e) => onPickAvatar((e.target.files && e.target.files[0]) || null)} disabled={uploading} />
-              </label>
             </div>
+
+            {/* Profile Info */}
+            <div className="flex flex-col gap-1">
+              <div className="text-base font-medium truncate max-w-40">
+                {data?.profile.fullName || ""}
+              </div>
+              <EcoBadgePill badge={data?.profile.ecoBadge} />
+            </div>
+
             <label className="space-y-1 block">
               <span className="text-base font-medium">Full name</span>
               <input value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full h-12 rounded-xl bg-emerald-700 border border-emerald-500 px-4 py-3 text-white placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-emerald-400/50" />
@@ -178,7 +156,7 @@ export default function ProfilePage() {
             </div>
           ) : (
             (data?.posts || []).map((p) => (
-              <PostCard key={p.id} post={p} currentUserId={data?.profile.id} />
+              <ContentCard key={p.id} post={p} currentUserId={data?.profile.id} />
             ))
           )}
         </div>

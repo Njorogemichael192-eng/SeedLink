@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Modal } from "@/components/ui/modal";
 import { motion } from "framer-motion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ImageUploader } from "@/components/ui/image-uploader";
 
 
 type PostType = "EVENT" | "ACHIEVEMENT";
@@ -37,8 +37,7 @@ export function CreatePostModal({ open, onClose }: { open: boolean; onClose: () 
   const [eventDate, setEventDate] = useState("");
   const [eventTime, setEventTime] = useState("09:00");
   const [incentive, setIncentive] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
-  const [dragActive, setDragActive] = useState(false);
+  const [mediaUrls, setMediaUrls] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const resetFormForType = () => {
@@ -46,7 +45,7 @@ export function CreatePostModal({ open, onClose }: { open: boolean; onClose: () 
     setTitle("");
     setDescription("");
     setLocation("");
-    setFiles([]);
+    setMediaUrls([]);
     setError(null);
 
     // Clear event-specific fields as well
@@ -57,16 +56,6 @@ export function CreatePostModal({ open, onClose }: { open: boolean; onClose: () 
 
   const uploadAndCreate = useMutation({
     mutationFn: async () => {
-      let mediaUrls: string[] = [];
-      if (files.length) {
-        const form = new FormData();
-        files.slice(0, 5).forEach((f) => form.append("files", f));
-        const up = await fetch("/api/uploads", { method: "POST", body: form });
-        const upJson = await up.json();
-        if (!up.ok) throw new Error(upJson.error || "Upload failed");
-        mediaUrls = upJson.uploads.map((u: { url: string }) => u.url);
-      }
-
       // Build event datetime in ISO if applicable
       let eventDateTimeIso: string | undefined = undefined;
       if (type === "EVENT" && eventDate && eventTime) {
@@ -168,57 +157,16 @@ export function CreatePostModal({ open, onClose }: { open: boolean; onClose: () 
           </motion.div>
         ) : null}
 
-
-        <div
-          className={`space-y-1 block border-2 border-dashed rounded-lg p-4 mb-2 transition-all ${dragActive ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-900/40' : 'border-white/30 bg-white/20 dark:bg-emerald-900/20'}`}
-          onDragOver={e => { e.preventDefault(); setDragActive(true); }}
-          onDragLeave={e => { e.preventDefault(); setDragActive(false); }}
-          onDrop={e => {
-            e.preventDefault();
-            setDragActive(false);
-            if (e.dataTransfer.files) {
-              setFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')).slice(0, 5));
-            }
+        {/* Image Uploader Component */}
+        <ImageUploader
+          onUploadComplete={(uploads) => {
+            setMediaUrls(uploads.map(u => u.url));
           }}
-        >
-          <span className="text-sm block mb-2">Images (up to 5)</span>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            style={{ display: 'none' }}
-            id="post-image-upload"
-            onChange={e => setFiles(Array.from(e.target.files || []).filter(f => f.type.startsWith('image/')).slice(0, 5))}
-          />
-          <label htmlFor="post-image-upload" className="cursor-pointer flex flex-col items-center justify-center gap-2 py-4">
-            <span className="text-emerald-700 dark:text-emerald-200 font-medium">Drag & drop or click to upload</span>
-            <span className="text-xs text-emerald-900/70 dark:text-emerald-100/70">Accepted: JPG, PNG, GIF (max 5 images)</span>
-            <span className="px-3 py-1 rounded bg-emerald-600 text-white mt-2">Browse files</span>
-          </label>
-          {files.length > 0 && (
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              {files.map((file, idx) => (
-                <div key={idx} className="relative aspect-video rounded-lg overflow-hidden bg-white/30 flex items-center justify-center">
-                  <Image
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                  <button
-                    type="button"
-                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs"
-                    onClick={e => {
-                      e.stopPropagation();
-                      setFiles(files.filter((_, i) => i !== idx));
-                    }}
-                  >Remove</button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+          maxFiles={5}
+          maxSizeMB={10}
+          disabled={uploadAndCreate.isPending}
+          initialMessage="Drag images here or click to browse"
+        />
 
         <div className="flex justify-end gap-2">
           <button onClick={onClose} className="px-4 py-2 rounded-lg border border-white/30">Cancel</button>

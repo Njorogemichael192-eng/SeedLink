@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { PostCard } from "@/components/posts/post-card";
+import { ContentCard } from "@/components/posts/content-card";
 import type { EcoBadge } from "@/lib/eco-score";
 
 export type FeedPost = {
@@ -69,9 +69,7 @@ export function FeedClient() {
       ) : (
         <div className="space-y-4">
           {data?.posts?.map((p) => (
-            <motion.div key={p.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-              <PostCard post={p} />
-            </motion.div>
+            <ContentCard key={p.id} post={p} currentUserId={data?.currentUserId} />
           ))}
         </div>
       )}
