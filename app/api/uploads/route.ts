@@ -61,10 +61,30 @@ export async function POST(req: Request) {
         });
 
       } catch (uploadError) {
-        console.error(`❌ Upload failed for ${f.name}:`, uploadError);
+        // Log detailed error information to help debugging ImageKit failures
+        try {
+          console.error(`❌ Upload failed for ${f.name}:`);
+          // If it's an Error, log stack; otherwise stringify
+          if (uploadError instanceof Error) {
+            console.error(uploadError.stack || uploadError.message);
+          } else {
+            console.error(JSON.stringify(uploadError, null, 2));
+          }
+        } catch (logErr) {
+          console.error("Error while logging upload error:", logErr);
+        }
+
+        // Also log the ImageKit configuration presence (do NOT log secret values)
+        console.log("🔧 ImageKit env present:", {
+          hasPublicKey: !!process.env.IMAGEKIT_PUBLIC_KEY,
+          hasPrivateKey: !!process.env.IMAGEKIT_PRIVATE_KEY,
+          hasUrlEndpoint: !!process.env.IMAGEKIT_URL_ENDPOINT,
+        });
+
         return NextResponse.json({ 
           error: `Failed to upload ${f.name}`,
-          detail: uploadError instanceof Error ? uploadError.message : 'Unknown error'
+          // Attempt to include useful details when possible
+          detail: uploadError instanceof Error ? uploadError.message : typeof uploadError === 'object' ? uploadError : String(uploadError)
         }, { status: 500 });
       }
     }
