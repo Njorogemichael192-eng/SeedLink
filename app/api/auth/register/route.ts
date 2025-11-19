@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { AccountType } from "@/generated/prisma-client/client";
+import { AccountType, Role } from "@/generated/prisma-client/client";
 
 const kenyaPhoneRegex = /^(?:\+254|0)(7\d{8})$/;
 
@@ -57,14 +57,30 @@ export async function POST(req: Request) {
   const { accountType, data } = parsed.data;
 
   const dbUser = await prisma.user.findFirst({ where: { clerkId: userId } });
-  if (!dbUser) {
-    return NextResponse.json({ error: "User record not found" }, { status: 404 });
+  
+  // Auto-create user record if it doesn't exist (handles fresh signups)
+  let user = dbUser;
+  if (!user) {
+    // Extract email based on account type
+    const email = 
+      accountType === "INDIVIDUAL" ? data.email :
+      accountType === "INSTITUTION" ? data.email :
+      data.contactEmail || "";
+    
+    user = await prisma.user.create({
+      data: {
+        clerkId: userId,
+        email,
+        accountType: AccountType.INDIVIDUAL,
+        role: Role.INDIVIDUAL,
+      },
+    });
   }
 
   if (accountType === "INDIVIDUAL") {
     const isClub = data.clubMembership === "yes";
     const updated = await prisma.user.update({
-      where: { id: dbUser.id },
+      where: { id: user.id },
       data: {
         accountType: AccountType.INDIVIDUAL,
         fullName: data.fullName,
@@ -82,7 +98,7 @@ export async function POST(req: Request) {
 
   if (accountType === "INSTITUTION") {
     const updated = await prisma.user.update({
-      where: { id: dbUser.id },
+      where: { id: user.id },
       data: {
         accountType: AccountType.INSTITUTION,
         email: data.email,
@@ -101,14 +117,14 @@ export async function POST(req: Request) {
   }
 
   const updated = await prisma.user.update({
-    where: { id: dbUser.id },
+    where: { id: user.id },
     data: {
       accountType: AccountType.ORGANIZATION,
       organizationName: data.organizationName,
       seedsDonatedCount: data.seedsDonatedCount,
       distributionArea: data.distributionArea,
-      email: data.contactEmail && data.contactEmail.length > 0 ? data.contactEmail : dbUser.email,
-      phoneNumber: data.contactPhone && data.contactPhone.length > 0 ? data.contactPhone : dbUser.phoneNumber,
+      email: data.contactEmail && data.contactEmail.length > 0 ? data.contactEmail : user.email,
+      phoneNumber: data.contactPhone && data.contactPhone.length > 0 ? data.contactPhone : user.phoneNumber,
       isVerified: true,
     },
   });

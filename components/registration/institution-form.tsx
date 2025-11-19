@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -44,14 +45,24 @@ export function InstitutionForm({ defaultEmail, onSubmitted }: InstitutionFormPr
     },
   });
 
+  const [error, setError] = useState<string | null>(null);
+
   const onSubmit = async (values: InstitutionFormValues) => {
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ accountType: "INSTITUTION", data: values }),
-    });
-    if (res.ok) {
-      onSubmitted();
+    setError(null);
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountType: "INSTITUTION", data: values }),
+      });
+      if (res.ok) {
+        onSubmitted();
+      } else {
+        const error = await res.json();
+        setError(`Error saving profile: ${error.error || "Unknown error"}`);
+      }
+    } catch (err) {
+      setError("Failed to save profile. Please try again.");
     }
   };
 
@@ -142,6 +153,12 @@ export function InstitutionForm({ defaultEmail, onSubmitted }: InstitutionFormPr
         />
         {errors.otherDetails && <p className="text-xs text-red-700">{errors.otherDetails.message}</p>}
       </label>
+
+      {error && (
+        <div className="rounded-lg bg-red-100 border border-red-300 p-3">
+          <p className="text-sm text-red-800">{error}</p>
+        </div>
+      )}
 
       <div className="flex justify-end">
         <button

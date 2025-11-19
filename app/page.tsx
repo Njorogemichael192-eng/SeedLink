@@ -3,6 +3,8 @@ import { useAuth, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { Calendar, MapPin, Gift } from "lucide-react";
 
 type LandingEvent = {
   id: string;
@@ -11,6 +13,10 @@ type LandingEvent = {
   location?: string | null;
   eventDateTime?: string | null;
   incentive?: string | null;
+  mediaUrls?: string[];
+  author: {
+    fullName: string | null;
+  };
 };
 
 export default function Home() {
@@ -35,6 +41,10 @@ export default function Home() {
             location?: string | null;
             eventDateTime?: string | null;
             incentive?: string | null;
+            mediaUrls?: string[];
+            author: {
+              fullName: string | null;
+            };
           }>;
         } = await res.json();
         const mapped: LandingEvent[] = (data.posts || []).map((p) => ({
@@ -44,6 +54,8 @@ export default function Home() {
           location: p.location,
           eventDateTime: p.eventDateTime,
           incentive: p.incentive,
+          mediaUrls: p.mediaUrls,
+          author: p.author,
         }));
         setEvents(mapped);
       } finally {
@@ -93,54 +105,92 @@ export default function Home() {
           </div>
         </motion.div>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {loadingEvents && events.length === 0 ? (
-            Array.from({ length: 3 }).map((_, i) => (
-              <div
-                key={i}
-                className="rounded-2xl backdrop-blur-xl bg-white/25 dark:bg-emerald-900/25 border border-white/20 p-6 h-40 animate-pulse"
-              />
-            ))
-          ) : events.length === 0 ? (
-            <div className="md:col-span-3 text-center text-emerald-900/80 dark:text-emerald-100/80 text-sm">
-              No upcoming events yet. Sign in to create the first one.
-            </div>
-          ) : (
-            events.slice(0, 6).map((ev) => (
-              <motion.button
-                key={ev.id}
-                type="button"
-                onClick={handleEventClick}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className="text-left rounded-2xl backdrop-blur-xl bg-white/25 dark:bg-emerald-900/25 border border-white/20 p-6 hover:scale-[1.01] transition-transform"
-              >
-                <div className="text-xs uppercase tracking-wide text-emerald-900/70 dark:text-emerald-100/70 mb-1">
-                  Upcoming event
-                </div>
-                <div className="font-semibold text-emerald-950 dark:text-emerald-50 mb-1 truncate">
-                  {ev.title}
-                </div>
-                {ev.location ? (
-                  <div className="text-xs text-emerald-900/70 dark:text-emerald-100/70 mb-1 truncate">
-                    {ev.location}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-emerald-900 dark:text-emerald-100 mb-6">Upcoming Events</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {loadingEvents && events.length === 0 ? (
+              Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl backdrop-blur-xl bg-white/25 dark:bg-emerald-900/25 border border-white/20 p-6 h-80 animate-pulse"
+                />
+              ))
+            ) : events.length === 0 ? (
+              <div className="md:col-span-2 lg:col-span-3 text-center text-emerald-900/80 dark:text-emerald-100/80 text-sm py-12">
+                No upcoming events yet. <button onClick={() => isSignedIn ? router.push("/dashboard") : openSignIn()} className="underline">Sign in to create the first one.</button>
+              </div>
+            ) : (
+              events.slice(0, 6).map((ev) => (
+                <motion.button
+                  key={ev.id}
+                  type="button"
+                  onClick={handleEventClick}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="text-left rounded-2xl backdrop-blur-xl bg-white/25 dark:bg-emerald-900/25 border border-white/20 overflow-hidden hover:scale-[1.02] transition-transform group"
+                >
+                  {/* Image */}
+                  {ev.mediaUrls && ev.mediaUrls.length > 0 ? (
+                    <div className="relative w-full h-40 overflow-hidden bg-gradient-to-br from-emerald-400 to-sky-500">
+                      <Image
+                        src={ev.mediaUrls[0]}
+                        alt={ev.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform"
+                        unoptimized
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full h-40 bg-gradient-to-br from-emerald-400 to-sky-500 flex items-center justify-center">
+                      <span className="text-4xl">🌱</span>
+                    </div>
+                  )}
+                  
+                  {/* Content */}
+                  <div className="p-4 space-y-2">
+                    <div className="text-xs uppercase tracking-wide text-emerald-900/70 dark:text-emerald-100/70">
+                      Upcoming event
+                    </div>
+                    <div className="font-semibold text-emerald-950 dark:text-emerald-50 line-clamp-2">
+                      {ev.title}
+                    </div>
+                    <p className="text-xs text-emerald-900/70 dark:text-emerald-100/70 line-clamp-2">
+                      {ev.description}
+                    </p>
+                    
+                    {/* Metadata */}
+                    <div className="space-y-1 pt-2 border-t border-white/20">
+                      {ev.eventDateTime && (
+                        <div className="flex items-center gap-2 text-xs text-emerald-900/80 dark:text-emerald-100/80">
+                          <Calendar className="w-3 h-3" />
+                          {new Date(ev.eventDateTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      )}
+                      {ev.location && (
+                        <div className="flex items-center gap-2 text-xs text-emerald-900/80 dark:text-emerald-100/80 truncate">
+                          <MapPin className="w-3 h-3 flex-shrink-0" />
+                          <span className="truncate">{ev.location}</span>
+                        </div>
+                      )}
+                      {ev.incentive && (
+                        <div className="flex items-center gap-2 text-xs text-emerald-900/80 dark:text-emerald-100/80">
+                          <Gift className="w-3 h-3" />
+                          {ev.incentive}
+                        </div>
+                      )}
+                      {ev.author?.fullName && (
+                        <div className="text-xs text-emerald-900/60 dark:text-emerald-100/60 pt-1">
+                          By {ev.author.fullName}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                ) : null}
-                {ev.eventDateTime ? (
-                  <div className="text-xs text-emerald-900/80 dark:text-emerald-100/80 mb-1">
-                    {new Date(ev.eventDateTime).toLocaleString()}
-                  </div>
-                ) : null}
-                {ev.incentive ? (
-                  <div className="text-xs text-emerald-900/80 dark:text-emerald-100/80">
-                    {ev.incentive}
-                  </div>
-                ) : null}
-              </motion.button>
-            ))
-          )}
+                </motion.button>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>

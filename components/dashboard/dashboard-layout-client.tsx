@@ -1,20 +1,51 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { FeedClient } from "@/components/dashboard/feed-client";
 
+interface UserProfile {
+  accountType: string;
+  fullName?: string;
+}
+
+function formatAccountType(type: string): string {
+  const typeMap: Record<string, string> = {
+    INDIVIDUAL: "Individual",
+    INSTITUTION: "Institution / Club",
+    ORGANIZATION: "Organization",
+  };
+  return typeMap[type] || type;
+}
+
 export function DashboardLayoutClient() {
   const { signOut } = useClerk();
   const { user } = useUser();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [accountType, setAccountType] = useState("INDIVIDUAL");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/me/profile");
+        if (res.ok) {
+          const profile: UserProfile = await res.json();
+          setAccountType(profile.accountType || "INDIVIDUAL");
+        }
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   const displayName =
     user?.firstName || user?.username || user?.primaryEmailAddress?.emailAddress || "Account";
-  const accountType = (user?.publicMetadata?.accountType as string | undefined) || "INDIVIDUAL";
 
   const handleLogout = async () => {
     setMenuOpen(false);
@@ -65,7 +96,7 @@ export function DashboardLayoutClient() {
               </div>
               <div className="text-lg font-semibold truncate">{displayName}</div>
               <div className="text-xs text-emerald-200/80 mt-1">
-                Account type: {accountType.toLowerCase()}
+                Account type: {loading ? "Loading..." : formatAccountType(accountType)}
               </div>
             </div>
             <div className="mt-3 space-y-2">

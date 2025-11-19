@@ -9,6 +9,10 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware((auth, req) => {
+  // Handle forwarded headers for dev environment
+  const forwarded = req.headers.get('x-forwarded-host');
+  const host = req.headers.get('host');
+  
   if (isPublicRoute(req)) return;
   auth.protect();
 });

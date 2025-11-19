@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,14 +38,24 @@ export function OrganizationForm({ onSubmitted }: OrganizationFormProps) {
     },
   });
 
+  const [error, setError] = useState<string | null>(null);
+
   const onSubmit = async (values: OrganizationFormValues) => {
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ accountType: "ORGANIZATION", data: values }),
-    });
-    if (res.ok) {
-      onSubmitted();
+    setError(null);
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountType: "ORGANIZATION", data: values }),
+      });
+      if (res.ok) {
+        onSubmitted();
+      } else {
+        const error = await res.json();
+        setError(`Error saving profile: ${error.error || "Unknown error"}`);
+      }
+    } catch (err) {
+      setError("Failed to save profile. Please try again.");
     }
   };
 
@@ -113,6 +124,12 @@ export function OrganizationForm({ onSubmitted }: OrganizationFormProps) {
           )}
         </label>
       </div>
+
+      {error && (
+        <div className="rounded-lg bg-red-100 border border-red-300 p-3">
+          <p className="text-sm text-red-800">{error}</p>
+        </div>
+      )}
 
       <div className="flex justify-end">
         <button

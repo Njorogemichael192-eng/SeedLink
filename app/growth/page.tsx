@@ -5,8 +5,8 @@ import { BackButton } from "@/components/ui/back-button";
 import { Modal } from "@/components/ui/modal";
 
 export default function GrowthPage() {
-  // TODO: clarify requirement before implementation — hook reminders (email + in-app) when check-ins are overdue
   const [items, setItems] = useState<Array<{ id: string; title: string; date: string; photoUrl?: string }>>([]);
+  const [loading, setLoading] = useState(true);
 
   const [reminderOpen, setReminderOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -14,20 +14,25 @@ export default function GrowthPage() {
   const [currentFreq, setCurrentFreq] = useState<string | null>(null);
 
   useEffect(() => {
-    const now = Date.now();
-    setItems([
-      { id: "1", title: "Planted 3 Moringa seedlings", date: new Date(now).toISOString() },
-      { id: "2", title: "Watered seedlings — week 2", date: new Date(now - 7 * 24 * 3600 * 1000).toISOString() },
-    ]);
-
     (async () => {
       try {
-        const res = await fetch("/api/growth/reminder");
-        if (!res.ok) return;
-        const json = await res.json();
-        setCurrentFreq(json.frequency || null);
+        setLoading(true);
+        // Fetch growth entries
+        const entriesRes = await fetch("/api/growth/entries");
+        if (entriesRes.ok) {
+          const json = await entriesRes.json();
+          setItems(json.entries || []);
+        }
+        // Fetch reminder frequency
+        const reminderRes = await fetch("/api/growth/reminder");
+        if (reminderRes.ok) {
+          const json = await reminderRes.json();
+          setCurrentFreq(json.frequency || null);
+        }
       } catch {
         // ignore
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
@@ -57,7 +62,7 @@ export default function GrowthPage() {
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 flex gap-2">
           <button
             className="px-4 py-2 rounded-lg bg-emerald-600 text-white shadow hover:scale-105 transition"
             type="button"
