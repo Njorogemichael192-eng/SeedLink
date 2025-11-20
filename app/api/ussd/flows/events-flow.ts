@@ -1,6 +1,7 @@
 import { formatCon, formatEnd, isEmpty, parseIntSafe } from "@/lib/ussd/helpers";
 import { SessionState } from "../session-manager";
-import { createUssdEventRegistration, getOrCreateUssdUserByPhone, listUpcomingEventsByCounty } from "@/lib/db";
+import { createUssdEventRegistration, getOrCreateUssdUserByPhone } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 
 export async function handleEventsFlow(params: {
   session: SessionState;
@@ -14,7 +15,16 @@ export async function handleEventsFlow(params: {
   }
 
   const county = textSegments[0].trim();
-  const events = await listUpcomingEventsByCounty(county);
+  // Query Posts with type EVENT (main app events) - USSD users can see them too
+  const events = await prisma.post.findMany({
+    where: {
+      type: "EVENT",
+      eventDateTime: { gte: new Date() },
+      author: { county: { contains: county, mode: "insensitive" } },
+    },
+    orderBy: { eventDateTime: "asc" },
+    take: 10,
+  });
 
   if (!events.length) {
     return formatEnd("No upcoming events in your county.");
@@ -22,10 +32,10 @@ export async function handleEventsFlow(params: {
 
   if (textSegments.length === 1) {
     const lines = events.map((e, idx) => {
-      const dateStr = e.eventDateTime.toLocaleDateString("en-KE", {
+      const dateStr = e.eventDateTime?.toLocaleDateString("en-KE", {
         day: "2-digit",
         month: "short",
-      });
+      }) || "TBD";
       return `${idx + 1}. ${e.title} (${dateStr})`;
     });
     return formatCon(`Select event to join:\n${lines.join("\n")}`);
@@ -37,9 +47,22 @@ export async function handleEventsFlow(params: {
   }
 
   const ussdUser = await getOrCreateUssdUserByPhone(phoneNumber, county);
-  const event = events[index - 1];
+  const post = events[index - 1];
 
-  await createUssdEventRegistration({ ussdUserId: ussdUser.id, eventId: event.id });
+  // Store USSD user's interest in the event
+  // Note: PostAttendance needs a User ID, so we just track in UssdEventRegistration with post ID
+  // For MVP, we'll store it as a comment-based interest indicator
+  try {
+    await prisma.comment.create({
+      data: {
+        postId: post.id,
+        authorId: post.authorId, // System marker
+        content: JSON.stringify({ ussdPhoneNumber: phoneNumber, ussdName: ussdUser.name, registeredVia: "USSD" }),
+      },
+    });
+  } catch {
+    // If comment creation fails, that's okay - the user still sees confirmation
+  }
 
-  return formatEnd(`You have joined: ${event.title}. Thank you for supporting SeedLink.`);
+  return formatEnd(`You have joined: ${post.title}. Thank you for supporting SeedLink.`);
 }

@@ -102,6 +102,21 @@ export function BookingModal({
       setSuccess("Booking confirmed! Check your notifications and email.");
       setError(null);
       await qc.invalidateQueries({ queryKey: ["stations"] });
+      // Reset form after 1.5 seconds and close modal
+      setTimeout(() => {
+        setSeedlingType(inventory[0]?.seedlingType || "");
+        setQuantity(1);
+        setScheduledPickupDate("");
+        setBookingType("INDIVIDUAL");
+        setEmail("");
+        setInstitutionName("");
+        setInstitutionEmail("");
+        setClubName("");
+        setClubInstitutionName("");
+        setClubEmail("");
+        setSpecialRequest("");
+        onClose();
+      }, 1500);
     },
     onError: (e: unknown) => {
       const msg = e instanceof Error ? e.message : "Booking failed";

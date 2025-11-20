@@ -6,11 +6,26 @@ import { useRouter } from "next/navigation";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { FeedClient } from "@/components/dashboard/feed-client";
 
+interface UserProfile {
+  accountType: string;
+  fullName?: string;
+}
+
+function formatAccountType(type: string): string {
+  const typeMap: Record<string, string> = {
+    INDIVIDUAL: "Individual",
+    INSTITUTION: "Institution / Club",
+    ORGANIZATION: "Organization",
+  };
+  return typeMap[type] || type;
+}
+
 export function DashboardLayoutClient() {
   const { signOut } = useClerk();
   const { user } = useUser();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+<<<<<<< HEAD
   const [accountType, setAccountType] = useState<string | null>(null);
 
   const displayName =
@@ -30,6 +45,29 @@ export function DashboardLayoutClient() {
 
     loadMe();
   }, []);
+
+  const [accountType, setAccountType] = useState("INDIVIDUAL");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/me/profile");
+        if (res.ok) {
+          const profile: UserProfile = await res.json();
+          setAccountType(profile.accountType || "INDIVIDUAL");
+        }
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const displayName =
+    user?.firstName || user?.username || user?.primaryEmailAddress?.emailAddress || "Account";
+ f4233fa70ce840996c1dc78ade2a6e7c927bdcd9
 
   const handleLogout = async () => {
     setMenuOpen(false);
@@ -80,7 +118,11 @@ export function DashboardLayoutClient() {
               </div>
               <div className="text-lg font-semibold truncate">{displayName}</div>
               <div className="text-xs text-emerald-200/80 mt-1">
+<<<<<<< HEAD
                 Account type: {(accountType ?? "INDIVIDUAL").toLowerCase()}
+=======
+                Account type: {loading ? "Loading..." : formatAccountType(accountType)}
+>>>>>>> f4233fa70ce840996c1dc78ade2a6e7c927bdcd9
               </div>
             </div>
             <div className="mt-3 space-y-2">

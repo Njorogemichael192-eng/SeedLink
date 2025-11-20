@@ -10,8 +10,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
@@ -85,98 +85,98 @@ enum GrowthReminderFrequency {
 }
 
 model User {
-  id                  String      @id @default(cuid())
-  clerkId             String      @unique
-  accountType         AccountType
-  role                Role        @default(INDIVIDUAL)
+  id          String      @id @default(cuid())
+  clerkId     String      @unique
+  accountType AccountType
+  role        Role        @default(INDIVIDUAL)
 
   // INDIVIDUAL fields
-  fullName            String?
-  clubMembership      Boolean?    @default(false)
-  clubName            String?
-  institutionName     String?
+  fullName        String?
+  clubMembership  Boolean? @default(false)
+  clubName        String?
+  institutionName String?
 
   // INSTITUTION / ORGANIZATION fields
-  organizationName    String?
-  institutionEmail    String?
-  clubEmail           String?
+  organizationName String?
+  institutionEmail String?
+  clubEmail        String?
 
   // ORGANIZATION-specific fields
-  seedsDonatedCount   Int?
-  distributionArea    String?
+  seedsDonatedCount Int?
+  distributionArea  String?
 
   // COMMON fields
-  email               String      @unique
-  phoneNumber         String?
-  county              String?
-  otherDetails        String?
-  isVerified          Boolean     @default(false)
-  profileImage        String?
+  email        String  @unique
+  phoneNumber  String?
+  county       String?
+  otherDetails String?
+  isVerified   Boolean @default(false)
+  profileImage String?
 
   // Existing profile fields (kept for backward compatibility)
-  profilePictureUrl   String?
-  bio                 String?
-  associatedClubId    String?
-  cooldownUntil       DateTime?
-  createdAt           DateTime    @default(now())
-  updatedAt           DateTime    @updatedAt
+  profilePictureUrl String?
+  bio               String?
+  associatedClubId  String?
+  cooldownUntil     DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  growthReminderFrequency GrowthReminderFrequency?
+  growthReminderFrequency  GrowthReminderFrequency?
   growthReminderLastSentAt DateTime?
 
-  club                Club?       @relation(fields: [associatedClubId], references: [id])
-  posts               Post[]
-  bookings            Booking[]
-  notifications       Notification[]
-  preferences         NotificationPreference?
-  eventsCreated       Event[]     @relation("EventsCreated")
-  eventAttendances    EventAttendance[]
-  postAttendances     PostAttendance[]
-  adminOfClubs        Club[]      @relation("ClubAdmin")
-  comments            Comment[]
-  reports             Report[]
+  club                 Club?                    @relation(fields: [associatedClubId], references: [id])
+  posts                Post[]
+  bookings             Booking[]
+  notifications        Notification[]
+  preferences          NotificationPreference?
+  eventsCreated        Event[]                  @relation("EventsCreated")
+  eventAttendances     EventAttendance[]
+  postAttendances      PostAttendance[]
+  adminOfClubs         Club[]                   @relation("ClubAdmin")
+  comments             Comment[]
+  reports              Report[]
   restockSubscriptions RestockSubscription[]
-  contentInteractions UserContentInteraction[]
+  contentInteractions  UserContentInteraction[]
 
   @@index([clerkId])
   @@index([email])
 }
 
 model Club {
-  id              String    @id @default(cuid())
-  name            String
+  id               String   @id @default(cuid())
+  name             String
   institutionEmail String?
-  county          String?
-  adminId         String
-  verified        Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  county           String?
+  adminId          String
+  verified         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  admin           User      @relation("ClubAdmin", fields: [adminId], references: [id])
-  members         User[]
-  events          Event[]
-  leaderboards    Leaderboard[]
+  admin        User          @relation("ClubAdmin", fields: [adminId], references: [id])
+  members      User[]
+  events       Event[]
+  leaderboards Leaderboard[]
 
   @@index([adminId])
 }
 
 model Post {
-  id             String    @id @default(cuid())
-  authorId       String
-  type           PostType
-  title          String
-  description    String
-  mediaUrls      String[]
-  location       String?
-  eventDateTime  DateTime?
-  incentive      String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id            String    @id @default(cuid())
+  authorId      String
+  type          PostType
+  title         String
+  description   String
+  mediaUrls     String[]
+  location      String?
+  eventDateTime DateTime?
+  incentive     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  author         User      @relation(fields: [authorId], references: [id])
-  comments       Comment[]
-  reports        Report[]
-  attendances    PostAttendance[]
+  author      User             @relation(fields: [authorId], references: [id])
+  comments    Comment[]
+  reports     Report[]
+  attendances PostAttendance[]
 
   @@index([authorId])
   @@index([type])
@@ -189,8 +189,8 @@ model PostAttendance {
   userId    String
   createdAt DateTime @default(now())
 
-  post      Post     @relation(fields: [postId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@unique([postId, userId])
   @@index([postId])
@@ -204,84 +204,84 @@ model Comment {
   content   String
   createdAt DateTime @default(now())
 
-  post      Post     @relation(fields: [postId], references: [id])
-  author    User     @relation(fields: [authorId], references: [id])
+  post   Post @relation(fields: [postId], references: [id])
+  author User @relation(fields: [authorId], references: [id])
 
   @@index([postId])
   @@index([authorId])
 }
 
 model Report {
-  id          String   @id @default(cuid())
-  postId      String?
-  userId      String
-  reportedId  String? // reported user id (optional)
-  reason      String
-  status      String   @default("PENDING")
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  postId     String?
+  userId     String
+  reportedId String? // reported user id (optional)
+  reason     String
+  status     String   @default("PENDING")
+  createdAt  DateTime @default(now())
 
-  post        Post?    @relation(fields: [postId], references: [id])
-  user        User     @relation(fields: [userId], references: [id])
+  post Post? @relation(fields: [postId], references: [id])
+  user User  @relation(fields: [userId], references: [id])
 
   @@index([postId])
   @@index([userId])
 }
 
 model SeedlingStation {
-  id            String             @id @default(cuid())
-  name          String
-  location      String
-  contactPhone  String?
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  location     String
+  contactPhone String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  inventory     SeedlingInventory[]
-  bookings      Booking[]
+  inventory            SeedlingInventory[]
+  bookings             Booking[]
   restockSubscriptions RestockSubscription[]
-  ussdBookings  UssdBooking[]
+  ussdBookings         UssdBooking[]
 }
 
 model SeedlingInventory {
-  id                 String           @id @default(cuid())
-  stationId          String
-  seedlingType       String
-  quantityAvailable  Int              @default(0)
-  status             InventoryStatus  @default(AVAILABLE)
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
+  id                String          @id @default(cuid())
+  stationId         String
+  seedlingType      String
+  quantityAvailable Int             @default(0)
+  status            InventoryStatus @default(AVAILABLE)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 
-  station            SeedlingStation  @relation(fields: [stationId], references: [id])
+  station SeedlingStation @relation(fields: [stationId], references: [id])
 
   @@unique([stationId, seedlingType])
   @@index([stationId])
 }
 
 model Booking {
-  id                   String        @id @default(cuid())
-  userId               String
-  stationId            String
-  seedlingType         String
-  quantity             Int
-  status               BookingStatus @default(PENDING)
-  scheduledPickupDate  DateTime
-  reminderSent         Boolean       @default(false)
-  createdAt            DateTime      @default(now())
-  updatedAt            DateTime      @updatedAt
-  cancelledAt          DateTime?
-  completedAt          DateTime?
+  id                  String        @id @default(cuid())
+  userId              String
+  stationId           String
+  seedlingType        String
+  quantity            Int
+  status              BookingStatus @default(PENDING)
+  scheduledPickupDate DateTime
+  reminderSent        Boolean       @default(false)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  cancelledAt         DateTime?
+  completedAt         DateTime?
 
   // Extra details depending on booking type
-  bookingType          BookingType   @default(INDIVIDUAL)
-  email                String?
-  institutionName      String?
-  institutionEmail     String?
-  clubName             String?
-  clubInstitutionName  String?
-  clubEmail            String?
-  specialRequest       String?
+  bookingType         BookingType @default(INDIVIDUAL)
+  email               String?
+  institutionName     String?
+  institutionEmail    String?
+  clubName            String?
+  clubInstitutionName String?
+  clubEmail           String?
+  specialRequest      String?
 
-  user                 User           @relation(fields: [userId], references: [id])
-  station              SeedlingStation @relation(fields: [stationId], references: [id])
+  user    User            @relation(fields: [userId], references: [id])
+  station SeedlingStation @relation(fields: [stationId], references: [id])
 
   @@index([userId])
   @@index([stationId])
@@ -289,22 +289,22 @@ model Booking {
 }
 
 model Event {
-  id            String        @id @default(cuid())
-  creatorId     String
-  clubId        String?
-  title         String
-  description   String
-  location      String
-  eventDateTime DateTime
+  id             String      @id @default(cuid())
+  creatorId      String
+  clubId         String?
+  title          String
+  description    String
+  location       String
+  eventDateTime  DateTime
   volunteerSlots Int?
-  incentive     String?
-  status        EventStatus   @default(UPCOMING)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  incentive      String?
+  status         EventStatus @default(UPCOMING)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 
-  creator       User          @relation("EventsCreated", fields: [creatorId], references: [id])
-  club          Club?         @relation(fields: [clubId], references: [id])
-  attendances   EventAttendance[]
+  creator           User                    @relation("EventsCreated", fields: [creatorId], references: [id])
+  club              Club?                   @relation(fields: [clubId], references: [id])
+  attendances       EventAttendance[]
   ussdRegistrations UssdEventRegistration[]
 
   @@index([creatorId])
@@ -313,15 +313,15 @@ model Event {
 }
 
 model EventAttendance {
-  id        String     @id @default(cuid())
-  eventId   String
-  userId    String
-  status    RSVPStatus @default(GOING)
+  id          String     @id @default(cuid())
+  eventId     String
+  userId      String
+  status      RSVPStatus @default(GOING)
   checkedInAt DateTime?
-  createdAt DateTime   @default(now())
+  createdAt   DateTime   @default(now())
 
-  event     Event      @relation(fields: [eventId], references: [id])
-  user      User       @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
 
   @@unique([eventId, userId])
   @@index([userId])
@@ -336,23 +336,23 @@ model Notification {
   read      Boolean             @default(false)
   createdAt DateTime            @default(now())
 
-  user      User                @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([read])
 }
 
 model NotificationPreference {
-  id                  String   @id @default(cuid())
-  userId              String   @unique
-  bookingEmails       Boolean  @default(true)
-  bookingInApp        Boolean  @default(true)
-  postEmails          Boolean  @default(true)
-  postInApp           Boolean  @default(true)
-  reminderEmails      Boolean  @default(true)
-  reminderInApp       Boolean  @default(true)
+  id             String  @id @default(cuid())
+  userId         String  @unique
+  bookingEmails  Boolean @default(true)
+  bookingInApp   Boolean @default(true)
+  postEmails     Boolean @default(true)
+  postInApp      Boolean @default(true)
+  reminderEmails Boolean @default(true)
+  reminderInApp  Boolean @default(true)
 
-  user                User     @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
 
 model RestockSubscription {
@@ -362,8 +362,8 @@ model RestockSubscription {
   seedlingType String
   createdAt    DateTime @default(now())
 
-  user         User     @relation(fields: [userId], references: [id])
-  station      SeedlingStation @relation(fields: [stationId], references: [id])
+  user    User            @relation(fields: [userId], references: [id])
+  station SeedlingStation @relation(fields: [stationId], references: [id])
 
   @@unique([userId, stationId, seedlingType])
   @@index([stationId, seedlingType])
@@ -382,40 +382,40 @@ model Leaderboard {
   participation    Int       @default(0)
   createdAt        DateTime  @default(now())
 
-  club             Club?     @relation(fields: [scopeClubId], references: [id])
+  club Club? @relation(fields: [scopeClubId], references: [id])
 
   @@unique([scopeType, scopeCounty, scopeClubId, periodMonth, periodYear])
   @@index([scopeType])
 }
 
 model UssdUser {
-  id           String   @id @default(cuid())
-  phoneNumber  String   @unique
-  name         String?
-  county       String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String   @id @default(cuid())
+  phoneNumber String   @unique
+  name        String?
+  county      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  sessions     UssdSession[]
-  bookings     UssdBooking[]
-  events       UssdEventRegistration[]
+  sessions UssdSession[]
+  bookings UssdBooking[]
+  events   UssdEventRegistration[]
 
   @@index([phoneNumber])
 }
 
 model UssdSession {
-  id              String     @id @default(cuid())
-  sessionId       String     @unique
+  id              String   @id @default(cuid())
+  sessionId       String   @unique
   phoneNumber     String
   ussdUserId      String?
   currentFlow     String?
   currentStep     String?
   data            Json?
-  isActive        Boolean    @default(true)
-  lastInteraction DateTime   @default(now())
-  createdAt       DateTime   @default(now())
+  isActive        Boolean  @default(true)
+  lastInteraction DateTime @default(now())
+  createdAt       DateTime @default(now())
 
-  ussdUser        UssdUser?  @relation(fields: [ussdUserId], references: [id])
+  ussdUser UssdUser? @relation(fields: [ussdUserId], references: [id])
 
   @@index([phoneNumber])
   @@index([isActive])
@@ -431,21 +431,21 @@ model UssdBooking {
   scheduledPickup DateTime?
   createdAt       DateTime      @default(now())
 
-  ussdUser        UssdUser      @relation(fields: [ussdUserId], references: [id])
-  station         SeedlingStation @relation(fields: [stationId], references: [id])
+  ussdUser UssdUser        @relation(fields: [ussdUserId], references: [id])
+  station  SeedlingStation @relation(fields: [stationId], references: [id])
 
   @@index([ussdUserId])
   @@index([stationId])
 }
 
 model UssdEventRegistration {
-  id          String   @id @default(cuid())
-  ussdUserId  String
-  eventId     String
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  ussdUserId String
+  eventId    String
+  createdAt  DateTime @default(now())
 
-  ussdUser    UssdUser @relation(fields: [ussdUserId], references: [id])
-  event       Event    @relation(fields: [eventId], references: [id])
+  ussdUser UssdUser @relation(fields: [ussdUserId], references: [id])
+  event    Event    @relation(fields: [eventId], references: [id])
 
   @@unique([ussdUserId, eventId])
   @@index([eventId])
@@ -467,20 +467,20 @@ model ContentItem {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  interactions   UserContentInteraction[]
+  interactions UserContentInteraction[]
 
   @@index([publishDate])
 }
 
 model UserContentInteraction {
-  id          String   @id @default(cuid())
-  userId      String
-  contentId   String
-  clickedAt   DateTime @default(now())
-  context     String?
+  id        String   @id @default(cuid())
+  userId    String
+  contentId String
+  clickedAt DateTime @default(now())
+  context   String?
 
-  user        User     @relation(fields: [userId], references: [id])
-  content     ContentItem @relation(fields: [contentId], references: [id])
+  user    User        @relation(fields: [userId], references: [id])
+  content ContentItem @relation(fields: [contentId], references: [id])
 
   @@index([userId])
   @@index([contentId])

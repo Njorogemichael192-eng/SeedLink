@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -61,16 +61,25 @@ export function IndividualForm({ defaultEmail, onSubmitted }: IndividualFormProp
     }
   }, [setValue, watch]);
 
+  const [error, setError] = useState<string | null>(null);
+
   const onSubmit = async (values: IndividualFormValues) => {
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ accountType: "INDIVIDUAL", data: values }),
-    });
-    if (res.ok) {
-      onSubmitted();
+    setError(null);
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountType: "INDIVIDUAL", data: values }),
+      });
+      if (res.ok) {
+        onSubmitted();
+      } else {
+        const error = await res.json();
+        setError(`Error saving profile: ${error.error || "Unknown error"}`);
+      }
+    } catch (err) {
+      setError("Failed to save profile. Please try again.");
     }
-    // TODO: surface error feedback
   };
 
   return (
@@ -168,6 +177,12 @@ export function IndividualForm({ defaultEmail, onSubmitted }: IndividualFormProp
         />
         {errors.otherDetails && <p className="text-xs text-red-700">{errors.otherDetails.message}</p>}
       </label>
+
+      {error && (
+        <div className="rounded-lg bg-red-100 border border-red-300 p-3">
+          <p className="text-sm text-red-800">{error}</p>
+        </div>
+      )}
 
       <div className="flex justify-end">
         <button
