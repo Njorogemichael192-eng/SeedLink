@@ -2,7 +2,7 @@ import { formatCon, formatEnd, isEmpty, parseIntSafe } from "@/lib/ussd/helpers"
 import { SessionState } from "../session-manager";
 import { createUssdBookingWithInventoryCheck, getOrCreateUssdUserByPhone, listStationsByCountyWithInventory } from "@/lib/db";
 import { MAX_USSD_SEEDLING_QUANTITY, USSD_INVALID_INPUT_PREFIX } from "@/lib/ussd/constants";
-import { sendAfricaTalkingSms } from "@/lib/sms/africastalking";
+import { sendAntugrowSms } from "@/lib/sms/antugrow";
 
 export async function handleBookingFlow(params: {
   session: SessionState;
@@ -82,7 +82,7 @@ export async function handleBookingFlow(params: {
     const pickupDate = booking.scheduledPickup?.toLocaleDateString("en-KE") ?? "soon";
     const smsMessage = `SeedLink booking confirmed. ${quantity} ${selectedInv.seedlingType} seedling(s) at ${station.name}. Pickup date: ${pickupDate}. Station: ${station.location}. Ref: ${booking.id}`;
     if (ussdUser.phoneNumber) {
-      await sendAfricaTalkingSms({ to: ussdUser.phoneNumber, message: smsMessage });
+      await sendAntugrowSms({ phoneNumber: ussdUser.phoneNumber, message: smsMessage });
     }
 
     return formatEnd(

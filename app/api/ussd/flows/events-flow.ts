@@ -3,7 +3,7 @@ import { SessionState } from "../session-manager";
 import { createUssdEventRegistration, getOrCreateUssdUserByPhone } from "@/lib/db";
 import { prisma } from "@/lib/prisma";
 import { USSD_INVALID_INPUT_PREFIX } from "@/lib/ussd/constants";
-import { sendAfricaTalkingSms } from "@/lib/sms/africastalking";
+import { sendAntugrowSms } from "@/lib/sms/antugrow";
 
 export async function handleEventsFlow(params: {
   session: SessionState;
@@ -75,7 +75,7 @@ export async function handleEventsFlow(params: {
     const hostName = post.author?.fullName || post.author?.organizationName || "host";
     const smsMessage = `You joined: ${post.title} on ${datePart} at ${timePart}, ${post.location}. Host: ${hostName}.`;
     if (ussdUser.phoneNumber) {
-      await sendAfricaTalkingSms({ to: ussdUser.phoneNumber, message: smsMessage });
+      await sendAntugrowSms({ phoneNumber: ussdUser.phoneNumber, message: smsMessage });
     }
   }
 
