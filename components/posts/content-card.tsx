@@ -262,12 +262,28 @@ export function ContentCard({ post, currentUserId }: { post: FeedPost; currentUs
                   try {
                     const res = await fetch(`/api/posts/${post.id}/join`, { method: "POST" });
                     let data: { attendeeCount?: number; error?: string } = {};
+                    let fallbackText: string | null = null;
                     try {
                       data = await res.json();
                     } catch {
-                      // Response body was empty or not JSON
+                      try {
+                        fallbackText = await res.text();
+                      } catch {
+                        // ignore
+                      }
                     }
-                    if (!res.ok) throw new Error(data.error || "Failed to join event");
+
+                    if (!res.ok) {
+                      const msg = data?.error || fallbackText || res.statusText || "Failed to join event";
+                      console.error("Join event failed:", msg, { status: res.status });
+                      setError(msg);
+                      // show a quick alert for immediate feedback
+                      try {
+                        window?.alert(msg);
+                      } catch {}
+                      return;
+                    }
+
                     setHasJoined(true);
                     if (typeof data.attendeeCount === "number") {
                       setAttendeeCount(data.attendeeCount);
@@ -275,7 +291,12 @@ export function ContentCard({ post, currentUserId }: { post: FeedPost; currentUs
                       setAttendeeCount((prev) => prev + 1);
                     }
                   } catch (e) {
+                    const msg = e instanceof Error ? e.message : "Failed to join event";
                     console.error(e);
+                    setError(msg);
+                    try {
+                      window?.alert(msg);
+                    } catch {}
                   }
                 }}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${

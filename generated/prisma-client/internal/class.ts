@@ -23,7 +23,11 @@ const config: runtime.GetPrismaClientConfig = {
       "value": "prisma-client"
     },
     "output": {
+<<<<<<< HEAD
       "value": "C:\\Users\\User\\CascadeProjects\\splitwise\\new-seedlink\\generated\\prisma-client",
+=======
+      "value": "/workspaces/SeedLink/generated/prisma-client",
+>>>>>>> 95e676a6d0e3f1e6267a6207ef2b7cf9ba9100ff
       "fromEnvVar": null
     },
     "config": {
@@ -32,12 +36,16 @@ const config: runtime.GetPrismaClientConfig = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "debian-openssl-1.1.x",
         "native": true
       }
     ],
     "previewFeatures": [],
+<<<<<<< HEAD
     "sourceFilePath": "C:\\Users\\User\\CascadeProjects\\splitwise\\new-seedlink\\prisma\\schema.prisma",
+=======
+    "sourceFilePath": "/workspaces/SeedLink/prisma/schema.prisma",
+>>>>>>> 95e676a6d0e3f1e6267a6207ef2b7cf9ba9100ff
     "isCustomOutput": true
   },
   "relativePath": "../../prisma",

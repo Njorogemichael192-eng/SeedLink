@@ -25,9 +25,18 @@ export function DashboardLayoutClient() {
   const { user } = useUser();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+<<<<<<< HEAD
   const [accountType, setAccountType] = useState("INDIVIDUAL");
   const [loading, setLoading] = useState(true);
 
+=======
+  const [accountType, setAccountType] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const displayName =
+    user?.firstName || user?.username || user?.primaryEmailAddress?.emailAddress || "Account";
+
+>>>>>>> 95e676a6d0e3f1e6267a6207ef2b7cf9ba9100ff
   useEffect(() => {
     (async () => {
       try {
@@ -44,9 +53,12 @@ export function DashboardLayoutClient() {
     })();
   }, []);
 
+<<<<<<< HEAD
   const displayName =
     user?.firstName || user?.username || user?.primaryEmailAddress?.emailAddress || "Account";
 
+=======
+>>>>>>> 95e676a6d0e3f1e6267a6207ef2b7cf9ba9100ff
   const handleLogout = async () => {
     setMenuOpen(false);
     await signOut();
@@ -96,7 +108,11 @@ export function DashboardLayoutClient() {
               </div>
               <div className="text-lg font-semibold truncate">{displayName}</div>
               <div className="text-xs text-emerald-200/80 mt-1">
+<<<<<<< HEAD
                 Account type: {loading ? "Loading..." : formatAccountType(accountType)}
+=======
+                Account type: {loading ? "Loading..." : formatAccountType(accountType ?? "INDIVIDUAL")}
+>>>>>>> 95e676a6d0e3f1e6267a6207ef2b7cf9ba9100ff
               </div>
             </div>
             <div className="mt-3 space-y-2">
