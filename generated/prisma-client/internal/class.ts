@@ -22,12 +22,8 @@ const config: runtime.GetPrismaClientConfig = {
       "fromEnvVar": null,
       "value": "prisma-client"
     },
-    "output": {
-<<<<<<< HEAD
+      "output": {
       "value": "C:\\Users\\User\\CascadeProjects\\splitwise\\new-seedlink\\generated\\prisma-client",
-=======
-      "value": "/workspaces/SeedLink/generated/prisma-client",
->>>>>>> 95e676a6d0e3f1e6267a6207ef2b7cf9ba9100ff
       "fromEnvVar": null
     },
     "config": {
@@ -41,11 +37,7 @@ const config: runtime.GetPrismaClientConfig = {
       }
     ],
     "previewFeatures": [],
-<<<<<<< HEAD
     "sourceFilePath": "C:\\Users\\User\\CascadeProjects\\splitwise\\new-seedlink\\prisma\\schema.prisma",
-=======
-    "sourceFilePath": "/workspaces/SeedLink/prisma/schema.prisma",
->>>>>>> 95e676a6d0e3f1e6267a6207ef2b7cf9ba9100ff
     "isCustomOutput": true
   },
   "relativePath": "../../prisma",
