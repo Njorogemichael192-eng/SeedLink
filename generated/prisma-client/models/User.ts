@@ -405,6 +405,7 @@ export type UserWhereInput = {
   reports?: Prisma.ReportListRelationFilter
   restockSubscriptions?: Prisma.RestockSubscriptionListRelationFilter
   contentInteractions?: Prisma.UserContentInteractionListRelationFilter
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -448,6 +449,7 @@ export type UserOrderByWithRelationInput = {
   reports?: Prisma.ReportOrderByRelationAggregateInput
   restockSubscriptions?: Prisma.RestockSubscriptionOrderByRelationAggregateInput
   contentInteractions?: Prisma.UserContentInteractionOrderByRelationAggregateInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -494,6 +496,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   reports?: Prisma.ReportListRelationFilter
   restockSubscriptions?: Prisma.RestockSubscriptionListRelationFilter
   contentInteractions?: Prisma.UserContentInteractionListRelationFilter
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryListRelationFilter
 }, "id" | "clerkId" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -604,6 +607,7 @@ export type UserCreateInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -646,6 +650,7 @@ export type UserUncheckedCreateInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -688,6 +693,7 @@ export type UserUpdateInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -730,6 +736,7 @@ export type UserUncheckedUpdateInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -978,6 +985,20 @@ export type NullableEnumGrowthReminderFrequencyFieldUpdateOperationsInput = {
   set?: $Enums.GrowthReminderFrequency | null
 }
 
+export type UserCreateNestedOneWithoutGrowthTrackerEntriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGrowthTrackerEntriesInput, Prisma.UserUncheckedCreateWithoutGrowthTrackerEntriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGrowthTrackerEntriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutGrowthTrackerEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGrowthTrackerEntriesInput, Prisma.UserUncheckedCreateWithoutGrowthTrackerEntriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGrowthTrackerEntriesInput
+  upsert?: Prisma.UserUpsertWithoutGrowthTrackerEntriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGrowthTrackerEntriesInput, Prisma.UserUpdateWithoutGrowthTrackerEntriesInput>, Prisma.UserUncheckedUpdateWithoutGrowthTrackerEntriesInput>
+}
+
 export type UserCreateNestedOneWithoutAdminOfClubsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAdminOfClubsInput, Prisma.UserUncheckedCreateWithoutAdminOfClubsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminOfClubsInput
@@ -1188,6 +1209,190 @@ export type UserUpdateOneRequiredWithoutContentInteractionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutContentInteractionsInput, Prisma.UserUpdateWithoutContentInteractionsInput>, Prisma.UserUncheckedUpdateWithoutContentInteractionsInput>
 }
 
+export type UserCreateWithoutGrowthTrackerEntriesInput = {
+  id?: string
+  clerkId: string
+  accountType: $Enums.AccountType
+  role?: $Enums.Role
+  fullName?: string | null
+  clubMembership?: boolean | null
+  clubName?: string | null
+  institutionName?: string | null
+  organizationName?: string | null
+  institutionEmail?: string | null
+  clubEmail?: string | null
+  seedsDonatedCount?: number | null
+  distributionArea?: string | null
+  email: string
+  phoneNumber?: string | null
+  county?: string | null
+  otherDetails?: string | null
+  isVerified?: boolean
+  profileImage?: string | null
+  profilePictureUrl?: string | null
+  bio?: string | null
+  cooldownUntil?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  growthReminderFrequency?: $Enums.GrowthReminderFrequency | null
+  growthReminderLastSentAt?: Date | string | null
+  club?: Prisma.ClubCreateNestedOneWithoutMembersInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  eventsCreated?: Prisma.EventCreateNestedManyWithoutCreatorInput
+  eventAttendances?: Prisma.EventAttendanceCreateNestedManyWithoutUserInput
+  postAttendances?: Prisma.PostAttendanceCreateNestedManyWithoutUserInput
+  adminOfClubs?: Prisma.ClubCreateNestedManyWithoutAdminInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  reports?: Prisma.ReportCreateNestedManyWithoutUserInput
+  restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
+  contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutGrowthTrackerEntriesInput = {
+  id?: string
+  clerkId: string
+  accountType: $Enums.AccountType
+  role?: $Enums.Role
+  fullName?: string | null
+  clubMembership?: boolean | null
+  clubName?: string | null
+  institutionName?: string | null
+  organizationName?: string | null
+  institutionEmail?: string | null
+  clubEmail?: string | null
+  seedsDonatedCount?: number | null
+  distributionArea?: string | null
+  email: string
+  phoneNumber?: string | null
+  county?: string | null
+  otherDetails?: string | null
+  isVerified?: boolean
+  profileImage?: string | null
+  profilePictureUrl?: string | null
+  bio?: string | null
+  associatedClubId?: string | null
+  cooldownUntil?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  growthReminderFrequency?: $Enums.GrowthReminderFrequency | null
+  growthReminderLastSentAt?: Date | string | null
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  eventsCreated?: Prisma.EventUncheckedCreateNestedManyWithoutCreatorInput
+  eventAttendances?: Prisma.EventAttendanceUncheckedCreateNestedManyWithoutUserInput
+  postAttendances?: Prisma.PostAttendanceUncheckedCreateNestedManyWithoutUserInput
+  adminOfClubs?: Prisma.ClubUncheckedCreateNestedManyWithoutAdminInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
+  restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutGrowthTrackerEntriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutGrowthTrackerEntriesInput, Prisma.UserUncheckedCreateWithoutGrowthTrackerEntriesInput>
+}
+
+export type UserUpsertWithoutGrowthTrackerEntriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutGrowthTrackerEntriesInput, Prisma.UserUncheckedUpdateWithoutGrowthTrackerEntriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutGrowthTrackerEntriesInput, Prisma.UserUncheckedCreateWithoutGrowthTrackerEntriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutGrowthTrackerEntriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutGrowthTrackerEntriesInput, Prisma.UserUncheckedUpdateWithoutGrowthTrackerEntriesInput>
+}
+
+export type UserUpdateWithoutGrowthTrackerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clubMembership?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  clubName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  institutionName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  institutionEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clubEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seedsDonatedCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  distributionArea?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooldownUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  growthReminderFrequency?: Prisma.NullableEnumGrowthReminderFrequencyFieldUpdateOperationsInput | $Enums.GrowthReminderFrequency | null
+  growthReminderLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  club?: Prisma.ClubUpdateOneWithoutMembersNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  eventsCreated?: Prisma.EventUpdateManyWithoutCreatorNestedInput
+  eventAttendances?: Prisma.EventAttendanceUpdateManyWithoutUserNestedInput
+  postAttendances?: Prisma.PostAttendanceUpdateManyWithoutUserNestedInput
+  adminOfClubs?: Prisma.ClubUpdateManyWithoutAdminNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
+  restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
+  contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutGrowthTrackerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clubMembership?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  clubName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  institutionName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  institutionEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clubEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seedsDonatedCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  distributionArea?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  associatedClubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooldownUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  growthReminderFrequency?: Prisma.NullableEnumGrowthReminderFrequencyFieldUpdateOperationsInput | $Enums.GrowthReminderFrequency | null
+  growthReminderLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  eventsCreated?: Prisma.EventUncheckedUpdateManyWithoutCreatorNestedInput
+  eventAttendances?: Prisma.EventAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  postAttendances?: Prisma.PostAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  adminOfClubs?: Prisma.ClubUncheckedUpdateManyWithoutAdminNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
+  restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutAdminOfClubsInput = {
   id?: string
   clerkId: string
@@ -1227,6 +1432,7 @@ export type UserCreateWithoutAdminOfClubsInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdminOfClubsInput = {
@@ -1268,6 +1474,7 @@ export type UserUncheckedCreateWithoutAdminOfClubsInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdminOfClubsInput = {
@@ -1314,6 +1521,7 @@ export type UserCreateWithoutClubInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutClubInput = {
@@ -1355,6 +1563,7 @@ export type UserUncheckedCreateWithoutClubInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutClubInput = {
@@ -1417,6 +1626,7 @@ export type UserUpdateWithoutAdminOfClubsInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdminOfClubsInput = {
@@ -1458,6 +1668,7 @@ export type UserUncheckedUpdateWithoutAdminOfClubsInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutClubInput = {
@@ -1548,6 +1759,7 @@ export type UserCreateWithoutPostsInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPostsInput = {
@@ -1589,6 +1801,7 @@ export type UserUncheckedCreateWithoutPostsInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPostsInput = {
@@ -1646,6 +1859,7 @@ export type UserUpdateWithoutPostsInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostsInput = {
@@ -1687,6 +1901,7 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPostAttendancesInput = {
@@ -1728,6 +1943,7 @@ export type UserCreateWithoutPostAttendancesInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPostAttendancesInput = {
@@ -1769,6 +1985,7 @@ export type UserUncheckedCreateWithoutPostAttendancesInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPostAttendancesInput = {
@@ -1826,6 +2043,7 @@ export type UserUpdateWithoutPostAttendancesInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostAttendancesInput = {
@@ -1867,6 +2085,7 @@ export type UserUncheckedUpdateWithoutPostAttendancesInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -1908,6 +2127,7 @@ export type UserCreateWithoutCommentsInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1949,6 +2169,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -2006,6 +2227,7 @@ export type UserUpdateWithoutCommentsInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -2047,6 +2269,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReportsInput = {
@@ -2088,6 +2311,7 @@ export type UserCreateWithoutReportsInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReportsInput = {
@@ -2129,6 +2353,7 @@ export type UserUncheckedCreateWithoutReportsInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReportsInput = {
@@ -2186,6 +2411,7 @@ export type UserUpdateWithoutReportsInput = {
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReportsInput = {
@@ -2227,6 +2453,7 @@ export type UserUncheckedUpdateWithoutReportsInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBookingsInput = {
@@ -2268,6 +2495,7 @@ export type UserCreateWithoutBookingsInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBookingsInput = {
@@ -2309,6 +2537,7 @@ export type UserUncheckedCreateWithoutBookingsInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBookingsInput = {
@@ -2366,6 +2595,7 @@ export type UserUpdateWithoutBookingsInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBookingsInput = {
@@ -2407,6 +2637,7 @@ export type UserUncheckedUpdateWithoutBookingsInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEventsCreatedInput = {
@@ -2448,6 +2679,7 @@ export type UserCreateWithoutEventsCreatedInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEventsCreatedInput = {
@@ -2489,6 +2721,7 @@ export type UserUncheckedCreateWithoutEventsCreatedInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEventsCreatedInput = {
@@ -2546,6 +2779,7 @@ export type UserUpdateWithoutEventsCreatedInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEventsCreatedInput = {
@@ -2587,6 +2821,7 @@ export type UserUncheckedUpdateWithoutEventsCreatedInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEventAttendancesInput = {
@@ -2628,6 +2863,7 @@ export type UserCreateWithoutEventAttendancesInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEventAttendancesInput = {
@@ -2669,6 +2905,7 @@ export type UserUncheckedCreateWithoutEventAttendancesInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEventAttendancesInput = {
@@ -2726,6 +2963,7 @@ export type UserUpdateWithoutEventAttendancesInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEventAttendancesInput = {
@@ -2767,6 +3005,7 @@ export type UserUncheckedUpdateWithoutEventAttendancesInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -2808,6 +3047,7 @@ export type UserCreateWithoutNotificationsInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -2849,6 +3089,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -2906,6 +3147,7 @@ export type UserUpdateWithoutNotificationsInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -2947,6 +3189,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPreferencesInput = {
@@ -2988,6 +3231,7 @@ export type UserCreateWithoutPreferencesInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPreferencesInput = {
@@ -3029,6 +3273,7 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPreferencesInput = {
@@ -3086,6 +3331,7 @@ export type UserUpdateWithoutPreferencesInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPreferencesInput = {
@@ -3127,6 +3373,7 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRestockSubscriptionsInput = {
@@ -3168,6 +3415,7 @@ export type UserCreateWithoutRestockSubscriptionsInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRestockSubscriptionsInput = {
@@ -3209,6 +3457,7 @@ export type UserUncheckedCreateWithoutRestockSubscriptionsInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRestockSubscriptionsInput = {
@@ -3266,6 +3515,7 @@ export type UserUpdateWithoutRestockSubscriptionsInput = {
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRestockSubscriptionsInput = {
@@ -3307,6 +3557,7 @@ export type UserUncheckedUpdateWithoutRestockSubscriptionsInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutContentInteractionsInput = {
@@ -3348,6 +3599,7 @@ export type UserCreateWithoutContentInteractionsInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   reports?: Prisma.ReportCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutContentInteractionsInput = {
@@ -3389,6 +3641,7 @@ export type UserUncheckedCreateWithoutContentInteractionsInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutUserInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutContentInteractionsInput = {
@@ -3446,6 +3699,7 @@ export type UserUpdateWithoutContentInteractionsInput = {
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutContentInteractionsInput = {
@@ -3487,6 +3741,7 @@ export type UserUncheckedUpdateWithoutContentInteractionsInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyClubInput = {
@@ -3557,6 +3812,7 @@ export type UserUpdateWithoutClubInput = {
   reports?: Prisma.ReportUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClubInput = {
@@ -3598,6 +3854,7 @@ export type UserUncheckedUpdateWithoutClubInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutUserNestedInput
   restockSubscriptions?: Prisma.RestockSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   contentInteractions?: Prisma.UserContentInteractionUncheckedUpdateManyWithoutUserNestedInput
+  growthTrackerEntries?: Prisma.GrowthTrackerEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutClubInput = {
@@ -3646,6 +3903,7 @@ export type UserCountOutputType = {
   reports: number
   restockSubscriptions: number
   contentInteractions: number
+  growthTrackerEntries: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3660,6 +3918,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   reports?: boolean | UserCountOutputTypeCountReportsArgs
   restockSubscriptions?: boolean | UserCountOutputTypeCountRestockSubscriptionsArgs
   contentInteractions?: boolean | UserCountOutputTypeCountContentInteractionsArgs
+  growthTrackerEntries?: boolean | UserCountOutputTypeCountGrowthTrackerEntriesArgs
 }
 
 /**
@@ -3749,6 +4008,13 @@ export type UserCountOutputTypeCountContentInteractionsArgs<ExtArgs extends runt
   where?: Prisma.UserContentInteractionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountGrowthTrackerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GrowthTrackerEntryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3791,6 +4057,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   reports?: boolean | Prisma.User$reportsArgs<ExtArgs>
   restockSubscriptions?: boolean | Prisma.User$restockSubscriptionsArgs<ExtArgs>
   contentInteractions?: boolean | Prisma.User$contentInteractionsArgs<ExtArgs>
+  growthTrackerEntries?: boolean | Prisma.User$growthTrackerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -3901,6 +4168,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   reports?: boolean | Prisma.User$reportsArgs<ExtArgs>
   restockSubscriptions?: boolean | Prisma.User$restockSubscriptionsArgs<ExtArgs>
   contentInteractions?: boolean | Prisma.User$contentInteractionsArgs<ExtArgs>
+  growthTrackerEntries?: boolean | Prisma.User$growthTrackerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3926,6 +4194,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     reports: Prisma.$ReportPayload<ExtArgs>[]
     restockSubscriptions: Prisma.$RestockSubscriptionPayload<ExtArgs>[]
     contentInteractions: Prisma.$UserContentInteractionPayload<ExtArgs>[]
+    growthTrackerEntries: Prisma.$GrowthTrackerEntryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4362,6 +4631,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   reports<T extends Prisma.User$reportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   restockSubscriptions<T extends Prisma.User$restockSubscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$restockSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RestockSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contentInteractions<T extends Prisma.User$contentInteractionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$contentInteractionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserContentInteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  growthTrackerEntries<T extends Prisma.User$growthTrackerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$growthTrackerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GrowthTrackerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5113,6 +5383,30 @@ export type User$contentInteractionsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.UserContentInteractionScalarFieldEnum | Prisma.UserContentInteractionScalarFieldEnum[]
+}
+
+/**
+ * User.growthTrackerEntries
+ */
+export type User$growthTrackerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GrowthTrackerEntry
+   */
+  select?: Prisma.GrowthTrackerEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GrowthTrackerEntry
+   */
+  omit?: Prisma.GrowthTrackerEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GrowthTrackerEntryInclude<ExtArgs> | null
+  where?: Prisma.GrowthTrackerEntryWhereInput
+  orderBy?: Prisma.GrowthTrackerEntryOrderByWithRelationInput | Prisma.GrowthTrackerEntryOrderByWithRelationInput[]
+  cursor?: Prisma.GrowthTrackerEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GrowthTrackerEntryScalarFieldEnum | Prisma.GrowthTrackerEntryScalarFieldEnum[]
 }
 
 /**

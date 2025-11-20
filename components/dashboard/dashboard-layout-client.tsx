@@ -37,9 +37,12 @@ export function DashboardLayoutClient() {
         if (res.ok) {
           const profile: UserProfile = await res.json();
           setAccountType(profile.accountType || "INDIVIDUAL");
+        } else {
+          setAccountType("INDIVIDUAL");
         }
       } catch (err) {
-        console.error("Failed to fetch profile:", err);
+        console.error("Failed to fetch account type:", err);
+        setAccountType("INDIVIDUAL");
       } finally {
         setLoading(false);
       }

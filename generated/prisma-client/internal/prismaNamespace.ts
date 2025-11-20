@@ -391,6 +391,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  GrowthTrackerEntry: 'GrowthTrackerEntry',
   Club: 'Club',
   Post: 'Post',
   PostAttendance: 'PostAttendance',
@@ -426,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "club" | "post" | "postAttendance" | "comment" | "report" | "seedlingStation" | "seedlingInventory" | "booking" | "event" | "eventAttendance" | "notification" | "notificationPreference" | "restockSubscription" | "leaderboard" | "ussdUser" | "ussdSession" | "ussdBooking" | "ussdEventRegistration" | "contentItem" | "userContentInteraction"
+    modelProps: "user" | "growthTrackerEntry" | "club" | "post" | "postAttendance" | "comment" | "report" | "seedlingStation" | "seedlingInventory" | "booking" | "event" | "eventAttendance" | "notification" | "notificationPreference" | "restockSubscription" | "leaderboard" | "ussdUser" | "ussdSession" | "ussdBooking" | "ussdEventRegistration" | "contentItem" | "userContentInteraction"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -501,6 +502,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    GrowthTrackerEntry: {
+      payload: Prisma.$GrowthTrackerEntryPayload<ExtArgs>
+      fields: Prisma.GrowthTrackerEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GrowthTrackerEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GrowthTrackerEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.GrowthTrackerEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GrowthTrackerEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload>
+        }
+        findMany: {
+          args: Prisma.GrowthTrackerEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload>[]
+        }
+        create: {
+          args: Prisma.GrowthTrackerEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload>
+        }
+        createMany: {
+          args: Prisma.GrowthTrackerEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GrowthTrackerEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.GrowthTrackerEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload>
+        }
+        update: {
+          args: Prisma.GrowthTrackerEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.GrowthTrackerEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GrowthTrackerEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GrowthTrackerEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.GrowthTrackerEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrowthTrackerEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.GrowthTrackerEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGrowthTrackerEntry>
+        }
+        groupBy: {
+          args: Prisma.GrowthTrackerEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GrowthTrackerEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GrowthTrackerEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GrowthTrackerEntryCountAggregateOutputType> | number
         }
       }
     }
@@ -2056,6 +2131,23 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const GrowthTrackerEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  description: 'description',
+  photoUrl: 'photoUrl',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  plantingDate: 'plantingDate',
+  aiHealthDiagnosis: 'aiHealthDiagnosis',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GrowthTrackerEntryScalarFieldEnum = (typeof GrowthTrackerEntryScalarFieldEnum)[keyof typeof GrowthTrackerEntryScalarFieldEnum]
+
+
 export const ClubScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -2480,6 +2572,20 @@ export type ListEnumGrowthReminderFrequencyFieldRefInput<$PrismaModel> = FieldRe
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
  * Reference to a field of type 'PostType'
  */
 export type EnumPostTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostType'>
@@ -2604,20 +2710,6 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2706,6 +2798,7 @@ export interface PrismaClientOptions {
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  growthTrackerEntry?: Prisma.GrowthTrackerEntryOmit
   club?: Prisma.ClubOmit
   post?: Prisma.PostOmit
   postAttendance?: Prisma.PostAttendanceOmit
