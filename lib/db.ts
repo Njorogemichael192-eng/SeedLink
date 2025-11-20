@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { BookingStatus, EventStatus } from "@/generated/prisma-client/client";
+import bcrypt from "bcryptjs";
 
-export async function getOrCreateUssdUserByPhone(phoneNumber: string, county?: string, name?: string) {
+export async function getOrCreateUssdUserByPhone(phoneNumber: string, county?: string, name?: string, pinPlain?: string) {
   const normalized = normalizePhone(phoneNumber);
   const existing = await prisma.ussdUser.findUnique({ where: { phoneNumber: normalized } });
   if (existing) {
@@ -10,7 +11,13 @@ export async function getOrCreateUssdUserByPhone(phoneNumber: string, county?: s
     }
     return existing;
   }
-  return prisma.ussdUser.create({ data: { phoneNumber: normalized, county, name } });
+  const pinHash = pinPlain ? await bcrypt.hash(pinPlain, 10) : undefined;
+  return prisma.ussdUser.create({ data: { phoneNumber: normalized, county, name, pinHash } });
+}
+
+export async function getUssdUserByPhone(phoneNumber: string) {
+  const normalized = normalizePhone(phoneNumber);
+  return prisma.ussdUser.findUnique({ where: { phoneNumber: normalized } });
 }
 
 export function normalizePhone(phone: string): string {

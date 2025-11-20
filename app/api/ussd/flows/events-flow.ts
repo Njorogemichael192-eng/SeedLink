@@ -2,6 +2,8 @@ import { formatCon, formatEnd, isEmpty, parseIntSafe } from "@/lib/ussd/helpers"
 import { SessionState } from "../session-manager";
 import { createUssdEventRegistration, getOrCreateUssdUserByPhone } from "@/lib/db";
 import { prisma } from "@/lib/prisma";
+import { USSD_INVALID_INPUT_PREFIX } from "@/lib/ussd/constants";
+import { sendAfricaTalkingSms } from "@/lib/sms/africastalking";
 
 export async function handleEventsFlow(params: {
   session: SessionState;
@@ -22,6 +24,7 @@ export async function handleEventsFlow(params: {
       eventDateTime: { gte: new Date() },
       author: { county: { contains: county, mode: "insensitive" } },
     },
+    include: { author: true },
     orderBy: { eventDateTime: "asc" },
     take: 10,
   });
@@ -30,20 +33,22 @@ export async function handleEventsFlow(params: {
     return formatEnd("No upcoming events in your county.");
   }
 
-  if (textSegments.length === 1) {
-    const lines = events.map((e, idx) => {
-      const dateStr = e.eventDateTime?.toLocaleDateString("en-KE", {
+  const lines = events.map((e, idx) => {
+    const dateStr =
+      e.eventDateTime?.toLocaleDateString("en-KE", {
         day: "2-digit",
         month: "short",
       }) || "TBD";
-      return `${idx + 1}. ${e.title} (${dateStr})`;
-    });
+    return `${idx + 1}. ${e.title} (${dateStr})`;
+  });
+
+  if (textSegments.length === 1) {
     return formatCon(`Select event to join:\n${lines.join("\n")}`);
   }
 
   const index = parseIntSafe(textSegments[1]);
   if (index < 1 || index > events.length) {
-    return formatCon("Invalid choice. Please try again:");
+    return formatCon(`${USSD_INVALID_INPUT_PREFIX}\nSelect event to join:\n${lines.join("\n")}`);
   }
 
   const ussdUser = await getOrCreateUssdUserByPhone(phoneNumber, county);
@@ -62,6 +67,16 @@ export async function handleEventsFlow(params: {
     });
   } catch {
     // If comment creation fails, that's okay - the user still sees confirmation
+  }
+
+  if (post.eventDateTime) {
+    const datePart = post.eventDateTime.toLocaleDateString("en-KE");
+    const timePart = post.eventDateTime.toLocaleTimeString("en-KE", { hour: "2-digit", minute: "2-digit" });
+    const hostName = post.author?.fullName || post.author?.organizationName || "host";
+    const smsMessage = `You joined: ${post.title} on ${datePart} at ${timePart}, ${post.location}. Host: ${hostName}.`;
+    if (ussdUser.phoneNumber) {
+      await sendAfricaTalkingSms({ to: ussdUser.phoneNumber, message: smsMessage });
+    }
   }
 
   return formatEnd(`You have joined: ${post.title}. Thank you for supporting SeedLink.`);

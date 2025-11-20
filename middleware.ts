@@ -9,11 +9,14 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware((auth, req) => {
-  // Handle forwarded headers for dev environment
-  const forwarded = req.headers.get('x-forwarded-host');
-  const host = req.headers.get('host');
-  
   if (isPublicRoute(req)) return;
+
+  // In development, don't globally protect via middleware.
+  // Individual routes/pages (e.g. /dashboard) still call auth() themselves.
+  if (process.env.NODE_ENV === "development") {
+    return;
+  }
+
   auth.protect();
 });
 

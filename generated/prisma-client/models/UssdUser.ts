@@ -29,6 +29,7 @@ export type UssdUserMinAggregateOutputType = {
   phoneNumber: string | null
   name: string | null
   county: string | null
+  pinHash: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +39,7 @@ export type UssdUserMaxAggregateOutputType = {
   phoneNumber: string | null
   name: string | null
   county: string | null
+  pinHash: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,6 +49,7 @@ export type UssdUserCountAggregateOutputType = {
   phoneNumber: number
   name: number
   county: number
+  pinHash: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -58,6 +61,7 @@ export type UssdUserMinAggregateInputType = {
   phoneNumber?: true
   name?: true
   county?: true
+  pinHash?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -67,6 +71,7 @@ export type UssdUserMaxAggregateInputType = {
   phoneNumber?: true
   name?: true
   county?: true
+  pinHash?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,6 +81,7 @@ export type UssdUserCountAggregateInputType = {
   phoneNumber?: true
   name?: true
   county?: true
+  pinHash?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -158,6 +164,7 @@ export type UssdUserGroupByOutputType = {
   phoneNumber: string
   name: string | null
   county: string | null
+  pinHash: string | null
   createdAt: Date
   updatedAt: Date
   _count: UssdUserCountAggregateOutputType | null
@@ -188,6 +195,7 @@ export type UssdUserWhereInput = {
   phoneNumber?: Prisma.StringFilter<"UssdUser"> | string
   name?: Prisma.StringNullableFilter<"UssdUser"> | string | null
   county?: Prisma.StringNullableFilter<"UssdUser"> | string | null
+  pinHash?: Prisma.StringNullableFilter<"UssdUser"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UssdUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UssdUser"> | Date | string
   sessions?: Prisma.UssdSessionListRelationFilter
@@ -200,6 +208,7 @@ export type UssdUserOrderByWithRelationInput = {
   phoneNumber?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   county?: Prisma.SortOrderInput | Prisma.SortOrder
+  pinHash?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessions?: Prisma.UssdSessionOrderByRelationAggregateInput
@@ -215,6 +224,7 @@ export type UssdUserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UssdUserWhereInput | Prisma.UssdUserWhereInput[]
   name?: Prisma.StringNullableFilter<"UssdUser"> | string | null
   county?: Prisma.StringNullableFilter<"UssdUser"> | string | null
+  pinHash?: Prisma.StringNullableFilter<"UssdUser"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UssdUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UssdUser"> | Date | string
   sessions?: Prisma.UssdSessionListRelationFilter
@@ -227,6 +237,7 @@ export type UssdUserOrderByWithAggregationInput = {
   phoneNumber?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   county?: Prisma.SortOrderInput | Prisma.SortOrder
+  pinHash?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UssdUserCountOrderByAggregateInput
@@ -242,6 +253,7 @@ export type UssdUserScalarWhereWithAggregatesInput = {
   phoneNumber?: Prisma.StringWithAggregatesFilter<"UssdUser"> | string
   name?: Prisma.StringNullableWithAggregatesFilter<"UssdUser"> | string | null
   county?: Prisma.StringNullableWithAggregatesFilter<"UssdUser"> | string | null
+  pinHash?: Prisma.StringNullableWithAggregatesFilter<"UssdUser"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UssdUser"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UssdUser"> | Date | string
 }
@@ -251,6 +263,7 @@ export type UssdUserCreateInput = {
   phoneNumber: string
   name?: string | null
   county?: string | null
+  pinHash?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.UssdSessionCreateNestedManyWithoutUssdUserInput
@@ -263,6 +276,7 @@ export type UssdUserUncheckedCreateInput = {
   phoneNumber: string
   name?: string | null
   county?: string | null
+  pinHash?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.UssdSessionUncheckedCreateNestedManyWithoutUssdUserInput
@@ -275,6 +289,7 @@ export type UssdUserUpdateInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.UssdSessionUpdateManyWithoutUssdUserNestedInput
@@ -287,6 +302,7 @@ export type UssdUserUncheckedUpdateInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.UssdSessionUncheckedUpdateManyWithoutUssdUserNestedInput
@@ -299,6 +315,7 @@ export type UssdUserCreateManyInput = {
   phoneNumber: string
   name?: string | null
   county?: string | null
+  pinHash?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -308,6 +325,7 @@ export type UssdUserUpdateManyMutationInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -317,6 +335,7 @@ export type UssdUserUncheckedUpdateManyInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -326,6 +345,7 @@ export type UssdUserCountOrderByAggregateInput = {
   phoneNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   county?: Prisma.SortOrder
+  pinHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -335,6 +355,7 @@ export type UssdUserMaxOrderByAggregateInput = {
   phoneNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   county?: Prisma.SortOrder
+  pinHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -344,6 +365,7 @@ export type UssdUserMinOrderByAggregateInput = {
   phoneNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   county?: Prisma.SortOrder
+  pinHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -407,6 +429,7 @@ export type UssdUserCreateWithoutSessionsInput = {
   phoneNumber: string
   name?: string | null
   county?: string | null
+  pinHash?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.UssdBookingCreateNestedManyWithoutUssdUserInput
@@ -418,6 +441,7 @@ export type UssdUserUncheckedCreateWithoutSessionsInput = {
   phoneNumber: string
   name?: string | null
   county?: string | null
+  pinHash?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.UssdBookingUncheckedCreateNestedManyWithoutUssdUserInput
@@ -445,6 +469,7 @@ export type UssdUserUpdateWithoutSessionsInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.UssdBookingUpdateManyWithoutUssdUserNestedInput
@@ -456,6 +481,7 @@ export type UssdUserUncheckedUpdateWithoutSessionsInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.UssdBookingUncheckedUpdateManyWithoutUssdUserNestedInput
@@ -467,6 +493,7 @@ export type UssdUserCreateWithoutBookingsInput = {
   phoneNumber: string
   name?: string | null
   county?: string | null
+  pinHash?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.UssdSessionCreateNestedManyWithoutUssdUserInput
@@ -478,6 +505,7 @@ export type UssdUserUncheckedCreateWithoutBookingsInput = {
   phoneNumber: string
   name?: string | null
   county?: string | null
+  pinHash?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.UssdSessionUncheckedCreateNestedManyWithoutUssdUserInput
@@ -505,6 +533,7 @@ export type UssdUserUpdateWithoutBookingsInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.UssdSessionUpdateManyWithoutUssdUserNestedInput
@@ -516,6 +545,7 @@ export type UssdUserUncheckedUpdateWithoutBookingsInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.UssdSessionUncheckedUpdateManyWithoutUssdUserNestedInput
@@ -527,6 +557,7 @@ export type UssdUserCreateWithoutEventsInput = {
   phoneNumber: string
   name?: string | null
   county?: string | null
+  pinHash?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.UssdSessionCreateNestedManyWithoutUssdUserInput
@@ -538,6 +569,7 @@ export type UssdUserUncheckedCreateWithoutEventsInput = {
   phoneNumber: string
   name?: string | null
   county?: string | null
+  pinHash?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.UssdSessionUncheckedCreateNestedManyWithoutUssdUserInput
@@ -565,6 +597,7 @@ export type UssdUserUpdateWithoutEventsInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.UssdSessionUpdateManyWithoutUssdUserNestedInput
@@ -576,6 +609,7 @@ export type UssdUserUncheckedUpdateWithoutEventsInput = {
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   county?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.UssdSessionUncheckedUpdateManyWithoutUssdUserNestedInput
@@ -636,6 +670,7 @@ export type UssdUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   phoneNumber?: boolean
   name?: boolean
   county?: boolean
+  pinHash?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   sessions?: boolean | Prisma.UssdUser$sessionsArgs<ExtArgs>
@@ -649,6 +684,7 @@ export type UssdUserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   phoneNumber?: boolean
   name?: boolean
   county?: boolean
+  pinHash?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["ussdUser"]>
@@ -658,6 +694,7 @@ export type UssdUserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   phoneNumber?: boolean
   name?: boolean
   county?: boolean
+  pinHash?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["ussdUser"]>
@@ -667,11 +704,12 @@ export type UssdUserSelectScalar = {
   phoneNumber?: boolean
   name?: boolean
   county?: boolean
+  pinHash?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UssdUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "phoneNumber" | "name" | "county" | "createdAt" | "updatedAt", ExtArgs["result"]["ussdUser"]>
+export type UssdUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "phoneNumber" | "name" | "county" | "pinHash" | "createdAt" | "updatedAt", ExtArgs["result"]["ussdUser"]>
 export type UssdUserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.UssdUser$sessionsArgs<ExtArgs>
   bookings?: boolean | Prisma.UssdUser$bookingsArgs<ExtArgs>
@@ -693,6 +731,7 @@ export type $UssdUserPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     phoneNumber: string
     name: string | null
     county: string | null
+    pinHash: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["ussdUser"]>
@@ -1125,6 +1164,7 @@ export interface UssdUserFieldRefs {
   readonly phoneNumber: Prisma.FieldRef<"UssdUser", 'String'>
   readonly name: Prisma.FieldRef<"UssdUser", 'String'>
   readonly county: Prisma.FieldRef<"UssdUser", 'String'>
+  readonly pinHash: Prisma.FieldRef<"UssdUser", 'String'>
   readonly createdAt: Prisma.FieldRef<"UssdUser", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UssdUser", 'DateTime'>
 }

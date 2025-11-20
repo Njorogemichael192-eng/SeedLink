@@ -2262,6 +2262,7 @@ export const UssdUserScalarFieldEnum = {
   phoneNumber: 'phoneNumber',
   name: 'name',
   county: 'county',
+  pinHash: 'pinHash',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

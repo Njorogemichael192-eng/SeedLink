@@ -1,7 +1,8 @@
 import { formatCon, formatEnd, isEmpty, parseIntSafe } from "@/lib/ussd/helpers";
 import { SessionState } from "../session-manager";
 import { createUssdBookingWithInventoryCheck, getOrCreateUssdUserByPhone, listStationsByCountyWithInventory } from "@/lib/db";
-import { MAX_USSD_SEEDLING_QUANTITY } from "@/lib/ussd/constants";
+import { MAX_USSD_SEEDLING_QUANTITY, USSD_INVALID_INPUT_PREFIX } from "@/lib/ussd/constants";
+import { sendAfricaTalkingSms } from "@/lib/sms/africastalking";
 
 export async function handleBookingFlow(params: {
   session: SessionState;
@@ -31,7 +32,11 @@ export async function handleBookingFlow(params: {
 
   const stationIndex = parseIntSafe(textSegments[1]);
   if (stationIndex < 1 || stationIndex > stations.length) {
-    return formatCon("Invalid station. Please try again:");
+    const lines = stations.map((s, idx) => {
+      const total = s.inventory.reduce((sum, i) => sum + i.quantityAvailable, 0);
+      return `${idx + 1}. ${s.name} (${total} seedlings)`;
+    });
+    return formatCon(`${USSD_INVALID_INPUT_PREFIX}\nSelect a station:\n${lines.join("\n")}`);
   }
   const station = stations[stationIndex - 1];
 
@@ -48,7 +53,8 @@ export async function handleBookingFlow(params: {
   const availableTypes = station.inventory.filter((i) => i.quantityAvailable > 0);
   const typeIndex = parseIntSafe(textSegments[2]);
   if (typeIndex < 1 || typeIndex > availableTypes.length) {
-    return formatCon("Invalid choice. Please try again:");
+    const invLines = availableTypes.map((i, idx) => `${idx + 1}. ${i.seedlingType} (${i.quantityAvailable})`);
+    return formatCon(`${USSD_INVALID_INPUT_PREFIX}\nSelect seedling type:\n${invLines.join("\n")}`);
   }
   const selectedInv = availableTypes[typeIndex - 1];
 
@@ -58,7 +64,9 @@ export async function handleBookingFlow(params: {
 
   const quantity = parseIntSafe(textSegments[3]);
   if (quantity < 1 || quantity > MAX_USSD_SEEDLING_QUANTITY) {
-    return formatCon(`Invalid quantity. Enter between 1 and ${MAX_USSD_SEEDLING_QUANTITY}:`);
+    return formatCon(
+      `${USSD_INVALID_INPUT_PREFIX}\nEnter quantity (1-${MAX_USSD_SEEDLING_QUANTITY}):`
+    );
   }
 
   const ussdUser = await getOrCreateUssdUserByPhone(phoneNumber, station.location);
@@ -71,10 +79,16 @@ export async function handleBookingFlow(params: {
       quantity,
     });
 
+    const pickupDate = booking.scheduledPickup?.toLocaleDateString("en-KE") ?? "soon";
+    const smsMessage = `SeedLink booking confirmed. ${quantity} ${selectedInv.seedlingType} seedling(s) at ${station.name}. Pickup date: ${pickupDate}. Station: ${station.location}. Ref: ${booking.id}`;
+    if (ussdUser.phoneNumber) {
+      await sendAfricaTalkingSms({ to: ussdUser.phoneNumber, message: smsMessage });
+    }
+
     return formatEnd(
       `Booking confirmed!\nStation: ${station.name}\nType: ${selectedInv.seedlingType}\nQuantity: ${quantity}\nRef: ${booking.id}`
     );
-  } catch (e) {
+  } catch {
     return formatEnd("Booking failed due to limited stock. Please try a lower quantity or another station.");
   }
 }
