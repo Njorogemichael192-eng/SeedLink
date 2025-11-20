@@ -25,49 +25,27 @@ export function DashboardLayoutClient() {
   const { user } = useUser();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-<<<<<<< HEAD
   const [accountType, setAccountType] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const displayName =
     user?.firstName || user?.username || user?.primaryEmailAddress?.emailAddress || "Account";
 
   useEffect(() => {
-    const loadMe = async () => {
+    (async () => {
       try {
         const res = await fetch("/api/me");
         if (!res.ok) return;
         const data = (await res.json()) as { accountType: string | null; role: string | null };
-        setAccountType(data.accountType);
-      } catch {
-        // ignore, keep default
-      }
-    };
-
-    loadMe();
-  }, []);
-
-  const [accountType, setAccountType] = useState("INDIVIDUAL");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch("/api/me/profile");
-        if (res.ok) {
-          const profile: UserProfile = await res.json();
-          setAccountType(profile.accountType || "INDIVIDUAL");
-        }
+        setAccountType(data.accountType || "INDIVIDUAL");
       } catch (err) {
-        console.error("Failed to fetch profile:", err);
+        console.error("Failed to fetch account type:", err);
+        setAccountType("INDIVIDUAL");
       } finally {
         setLoading(false);
       }
     })();
   }, []);
-
-  const displayName =
-    user?.firstName || user?.username || user?.primaryEmailAddress?.emailAddress || "Account";
- f4233fa70ce840996c1dc78ade2a6e7c927bdcd9
 
   const handleLogout = async () => {
     setMenuOpen(false);
@@ -118,11 +96,7 @@ export function DashboardLayoutClient() {
               </div>
               <div className="text-lg font-semibold truncate">{displayName}</div>
               <div className="text-xs text-emerald-200/80 mt-1">
-<<<<<<< HEAD
-                Account type: {(accountType ?? "INDIVIDUAL").toLowerCase()}
-=======
-                Account type: {loading ? "Loading..." : formatAccountType(accountType)}
->>>>>>> f4233fa70ce840996c1dc78ade2a6e7c927bdcd9
+                Account type: {loading ? "Loading..." : (accountType ?? "INDIVIDUAL").toLowerCase()}
               </div>
             </div>
             <div className="mt-3 space-y-2">

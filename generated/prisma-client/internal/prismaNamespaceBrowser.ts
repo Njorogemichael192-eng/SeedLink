@@ -50,6 +50,7 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 export const ModelName = {
   User: 'User',
+  GrowthTrackerEntry: 'GrowthTrackerEntry',
   Club: 'Club',
   Post: 'Post',
   PostAttendance: 'PostAttendance',
@@ -119,6 +120,23 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const GrowthTrackerEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  description: 'description',
+  photoUrl: 'photoUrl',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  plantingDate: 'plantingDate',
+  aiHealthDiagnosis: 'aiHealthDiagnosis',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GrowthTrackerEntryScalarFieldEnum = (typeof GrowthTrackerEntryScalarFieldEnum)[keyof typeof GrowthTrackerEntryScalarFieldEnum]
 
 
 export const ClubScalarFieldEnum = {

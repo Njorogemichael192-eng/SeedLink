@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSuperAdmin } from "@/lib/auth-helpers";
 
 interface Params {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export async function PATCH(req: Request, { params }: Params) {
+export async function PATCH(req: NextRequest, { params }: Params) {
   try {
     await requireSuperAdmin();
   } catch (e: unknown) {
@@ -14,6 +14,7 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: "Forbidden" }, { status });
   }
 
+  const { id } = await params;
   const body = await req.json().catch(() => ({}));
   const {
     title,
@@ -42,11 +43,11 @@ export async function PATCH(req: Request, { params }: Params) {
   if (typeof difficulty === "string") data.difficulty = difficulty;
   if (Array.isArray(tags)) data.tags = { set: tags };
 
-  const item = await prisma.contentItem.update({ where: { id: params.id }, data });
+  const item = await prisma.contentItem.update({ where: { id }, data });
   return NextResponse.json({ item });
 }
 
-export async function DELETE(_req: Request, { params }: Params) {
+export async function DELETE(_req: NextRequest, { params }: Params) {
   try {
     await requireSuperAdmin();
   } catch (e: unknown) {
@@ -54,6 +55,7 @@ export async function DELETE(_req: Request, { params }: Params) {
     return NextResponse.json({ error: "Forbidden" }, { status });
   }
 
-  await prisma.contentItem.delete({ where: { id: params.id } });
+  const { id } = await params;
+  await prisma.contentItem.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }

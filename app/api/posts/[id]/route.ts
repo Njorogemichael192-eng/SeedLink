@@ -1,11 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const post = await prisma.post.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       author: true,
       comments: {
@@ -26,7 +27,8 @@ const UpdatePostSchema = z.object({
   incentive: z.string().optional().nullable(),
 });
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
