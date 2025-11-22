@@ -9,6 +9,129 @@ SeedLink connects everyday Kenyans, institutions, and organizations with real co
 - Access the platform via Web + USSD, so feature-phone users are fully included.  
 
 
+---
+
+## Simple Overview (Non‑Technical)
+
+### 1. Project Basic Info
+- **Project Name**: SeedLink – Kenya's Living Chain of Green  
+- **What it is**: A website and phone (USSD) system that helps people find seedlings, plant trees, and track how they grow.  
+- **Tagline**: *"Connecting people, seedlings, and forests through community action"*
+
+### 2. What Problem We Solve
+**Three common problems in Kenya:**  
+- People dont know where to get quality seedlings.  
+- After planting, people forget to care for the trees.  
+- School environment clubs slow down or die when students graduate.  
+
+**SeedLink helps by:**  
+- Showing nearby stations where you can book seedlings.  
+- Sending reminders and tools to track tree growth.  
+- Giving schools and clubs a shared online space to continue their work over time.  
+
+### 3. Who Uses SeedLink
+
+| User Type | What They Do |
+|-----------|--------------|
+| **Individuals** | Find and book seedlings, join events, log tree growth, share achievements |
+| **School Clubs** | Organise tree‑planting activities or any other environmental related activity, track member contributions |
+| **Organizations** | Donate seedlings, sponsor events, view impact |
+| **Admins** | Manage seedling stations, events, and platform reports |
+
+### 4. Main Features 
+
+#### 🌱 Planting & Growing
+- **Find Seedlings** – See stations that have seedlings available.  
+- **Book Seedlings** – Reserve seedlings from the web or by USSD.  
+- **Track Growth** – Log your trees, set dates, and store photos.  
+
+#### 👥 Community & Clubs
+- **Join Events** – Tree‑planting days, clean‑ups, and workshops.  
+- **School Clubs** – Create clubs, record activities, and show impact.  
+- **Leaderboards** – See top planters, clubs, and counties.  
+
+#### 📱 How You Access SeedLink
+- **Website** – Full experience on smartphone or computer.  
+- **USSD** – Works on basic feature phones, no internet needed.  
+
+**Current USSD entry** (configurable): `*384*92#`  
+
+USSD high‑level flow (simplified):  
+- **Level 0 – Welcome**  
+  - `1. Register`  
+  - `2. Login`  
+  - `00. Exit`  
+- **After registration/login – Main Menu**  
+  - `1. Book Seedlings`  
+  - `2. Join Events`  
+  - `3. Exit`  
+  - `00. Logout`  
+
+Booking by USSD: enter county → pick station → enter quantity (1–5) → choose pickup date → confirm.  
+Events by USSD: enter county → pick event → see details → confirm attendance.  
+Confirmations are sent by SMS using Africa's Talking.  
+
+### 5. New Antugrow Features (Growth Tracking)
+
+These features are available through the **Growth Tracker** part of the app:
+
+- **Satellite Tree Health Check** – Uses GPS coordinates from growth entries plus Antugrow satellite data (NDVI) to estimate tree health.  
+- **Local Conditions** – Shows environmental conditions (like rainfall patterns and context) for the tree location.  
+- **AI Plant Doctor** – You upload a photo of a tree; Antugrows AI analyzes it and returns a diagnosis stored on the growth entry.  
+
+> Note: These Antugrow features work on **GrowthTrackerEntry** records, not on general social posts.
+
+### 6. Quick Setup for Developers
+
+**You need:**  
+- Node.js 18+  
+- PostgreSQL  
+- Git  
+
+Basic steps (inside `new-seedlink/`):
+
+```bash
+git clone https://github.com/Njorogemichael192-eng/SeedLink.git
+cd SeedLink/new-seedlink
+
+npm install
+
+cp .env.example .env.local   # then edit values
+
+npx prisma generate
+npx prisma db push
+
+npm run dev
+```
+
+Key environment variables (simplified):
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@host:port/dbname"
+
+# Antugrow API
+ANTUGROW_API_KEY="your_key_here"
+ANTUGROW_BASE_URL="https://api.antugrow.com/v1"
+
+# Auth & media (examples)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="..."
+CLERK_SECRET_KEY="..."
+IMAGEKIT_PUBLIC_KEY="..."
+IMAGEKIT_PRIVATE_KEY="..."
+IMAGEKIT_URL_ENDPOINT="https://ik.imagekit.io/..."
+
+# USSD (logical config)
+USSD_CODE="*384*92#"
+```
+
+### 7. Technology (Simple View)
+
+- **Frontend**: Next.js (App Router), React, TypeScript, Tailwind CSS.  
+- **Backend**: Next.js API routes + Prisma ORM + PostgreSQL.  
+- **External Services**: Antugrow (satellite & AI), ImageKit (images), Clerk (auth), Africa's Talking (SMS/USSD transport layer).
+
+---
 
 📖 Table of Contents  
 
@@ -309,6 +432,45 @@ Typical flow (depending on integration):
    - USSD entry hits POST /api/ussd  
    - State kept via UssdSession and UssdUser  
    - Confirmations can be sent over SMS via Antugrow  
+
+8.2.1 Quick Start for USSD Testers  
+
+Use a test phone (or simulator) with the configured code, for example: `*384*92#`.  
+
+**A. New user registration**  
+1. Dial `*384*92#` → you see:  
+   `1. Register` / `2. Login` / `00. Exit`  
+2. Reply `1`  
+3. Enter full name, e.g. `Jane Doe`  
+4. Enter county, e.g. `Nairobi`  
+5. Enter PIN, e.g. `1234`  
+6. You see: `Registration complete! Main menu...` plus main menu options.  
+
+**B. Login (existing USSD user)**  
+1. Dial `*384*92#`  
+2. Reply `2` for Login  
+3. Enter your 4‑digit PIN, e.g. `1234`  
+4. On success you see: `Login successful! Main menu...` and the main menu.  
+
+**C. Book seedlings**  
+1. From main menu, reply `1` (Book Seedlings)  
+2. Enter your county, e.g. `Nairobi`  
+3. Select station number from the list, e.g. `1`  
+4. Enter quantity between `1` and `5`, e.g. `3`  
+5. Enter pickup date in `DD/MM/YYYY`, at least 48 hours from now, e.g. `25/12/2025`  
+6. Confirm: reply `1` (Yes) when asked `Confirm booking? 1. Yes 2. No`  
+7. You get an END message confirming the booking, and an SMS like:  
+   `SeedLink Booking Confirmed🌱 ...`  
+
+**D. Join an event**  
+1. From main menu, reply `2` (Join Events)  
+2. Enter your county, e.g. `Nairobi`  
+3. Select event number from the list, e.g. `1`  
+4. Read event details, then reply `1` to `Confirm attendance? 1. Yes 2. No`  
+5. You get an END message: `You have joined: ...`, and an SMS like:  
+   `SeedLink Event Confirmed📅 ...`  
+
+This mirrors the production USSD logic implemented under `app/api/ussd` and the related flow handlers.  
 
 8.3 For Institutions & Organizations  
 

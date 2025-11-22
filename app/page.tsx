@@ -133,7 +133,7 @@ export default function Home() {
                 >
                   {/* Image */}
                   {ev.mediaUrls && ev.mediaUrls.length > 0 ? (
-                    <div className="relative w-full h-40 overflow-hidden bg-gradient-to-br from-emerald-400 to-sky-500">
+                    <div className="relative w-full h-40 overflow-hidden bg-linear-to-br from-emerald-400 to-sky-500">
                       <Image
                         src={ev.mediaUrls[0]}
                         alt={ev.title}
@@ -143,7 +143,7 @@ export default function Home() {
                       />
                     </div>
                   ) : (
-                    <div className="w-full h-40 bg-gradient-to-br from-emerald-400 to-sky-500 flex items-center justify-center">
+                    <div className="w-full h-40 bg-linear-to-br from-emerald-400 to-sky-500 flex items-center justify-center">
                       <span className="text-4xl">🌱</span>
                     </div>
                   )}
@@ -170,7 +170,7 @@ export default function Home() {
                       )}
                       {ev.location && (
                         <div className="flex items-center gap-2 text-xs text-emerald-900/80 dark:text-emerald-100/80 truncate">
-                          <MapPin className="w-3 h-3 flex-shrink-0" />
+                          <MapPin className="w-3 h-3 shrink-0" />
                           <span className="truncate">{ev.location}</span>
                         </div>
                       )}
