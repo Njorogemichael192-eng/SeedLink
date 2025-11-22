@@ -54,7 +54,7 @@ SeedLink connects everyday Kenyans, institutions, and organizations with real co
 - **Website** – Full experience on smartphone or computer.  
 - **USSD** – Works on basic feature phones, no internet needed.  
 
-**Current USSD entry** (configurable): `*384*92#`  
+**Current USSD entry** (configurable): `*384*42552#`  
 
 USSD high‑level flow (simplified):  
 - **Level 0 – Welcome**  
@@ -435,7 +435,7 @@ Typical flow (depending on integration):
 
 8.2.1 Quick Start for USSD Testers  
 
-Use a test phone (or simulator) with the configured code, for example: `*384*92#`.  
+Use a test phone (or simulator) with the configured code, for example: `*384*42552#`.  
 
 **A. New user registration**  
 1. Dial `*384*92#` → you see:  
