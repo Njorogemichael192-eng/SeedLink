@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BackButton } from "@/components/ui/back-button";
 import { Modal } from "@/components/ui/modal";
+import { ImageUploader } from "@/components/ui/image-uploader";
 
 interface GrowthEntry {
   id: string;
@@ -275,7 +276,7 @@ export default function GrowthPage() {
 
       {/* New Entry Modal */}
       <Modal open={showNewEntryModal} onClose={() => (submitting ? null : setShowNewEntryModal(false)) as unknown as void}>
-        <div className="space-y-4">
+        <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
           <h2 className="text-lg font-semibold text-emerald-950 dark:text-emerald-50">Create New Growth Entry</h2>
           
           {/* Geolocation Status */}
@@ -345,16 +346,22 @@ export default function GrowthPage() {
 
             <div>
               <label className="block text-sm font-medium text-emerald-950 dark:text-emerald-100 mb-1">
-                Photo URL
+                Photo
               </label>
-              <input
-                type="url"
-                value={formData.photoUrl}
-                onChange={(e) => setFormData({ ...formData, photoUrl: e.target.value })}
-                placeholder="https://example.com/photo.jpg"
-                className="w-full px-3 py-2 rounded-lg bg-white/80 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 text-emerald-950 dark:text-emerald-50 placeholder-emerald-600/50"
-                disabled={submitting}
+              <ImageUploader
+                maxFiles={1}
+                onUploadComplete={(uploads) => {
+                  if (uploads && uploads[0]?.url) {
+                    setFormData((prev) => ({ ...prev, photoUrl: uploads[0].url }));
+                  }
+                }}
+                initialMessage="Drag & drop or click to upload a photo"
               />
+              {formData.photoUrl && (
+                <div className="mt-2 text-xs text-emerald-900/70 dark:text-emerald-100/70">
+                  Uploaded: <a href={formData.photoUrl} target="_blank" rel="noreferrer" className="underline">{formData.photoUrl}</a>
+                </div>
+              )}
             </div>
           </div>
 
